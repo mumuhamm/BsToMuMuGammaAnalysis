@@ -24,33 +24,50 @@ class RadiativeRootTree {
 		void setBranchAddresses();
 
 	public: 
-		int photonMultiplicity_;
-		double photonEta_;
-		double photonPhi_;
-		int    isPV_;
-      int    isBS_;
-  int    NVertices_;
-  double BSx_ ;
-  double BSy_ ;
-  double BSz_ ;
-  double BSdx_ ;
-  double BSdy_ ;
-  double BSdz_ ;
-  double BSdydz_;
-  double BSdxdz_;
-  double PVx_ ;
-  double PVy_ ;
-  double PVz_ ;
-  double PVerrx_ ;
-  double PVerry_ ;
-  double PVerrz_ ;
-  double dedxTrk_;
-  double errdedxTrk_;
-  int    numdedxTrk_;
-  double costheta_;
-  double phi_;
-  double cospsi_;
-  double AngleBsDecayLength_;
+		 int    runNumber_;
+                 int    PUinteraction_;
+		 int    PUTrueinteraction_;
+                 unsigned int eventNumber_;
+                 int    lumiSection_;
+ 		 int    photonMultiplicity_;
+		 double photonPt_;
+		 double photonEta_;
+		 double photonPhi_;
+		 int    isPV_;
+		 int    NVerticesbeforecut_;
+		 int    NVerticesaftercut_;
+		 int    isBS_;
+		 double BSx_ ;
+		 double BSy_ ;
+		 double BSz_ ;
+		 double BSdx_ ;
+		 double BSdy_ ;
+		 double BSdz_ ;
+		 double BSdydz_;
+		 double BSdxdz_;
+		 double BSsigmaZ_;
+		 double BSdsigmaZ_;
+		 double PVx_ ;
+		 double PVy_ ;
+		 double PVz_ ;
+		 double PVerrx_ ;
+		 double PVerry_ ;
+		 double PVerrz_ ;
+		 double PVndof_;
+		 double PVrho_;
+		 double dedxTrk_;
+		 double errdedxTrk_;
+		 int    numdedxTrk_;
+		 double costheta_;
+		 double phi_;
+		 double cospsi_;
+		 double AngleBsDecayLength_;
+
+
+
+		 //arrays 
+		 double PVcovariance_[9];
+
 
 		TFile* bmmgFile_;
                 TTree* bmmgTree_;

@@ -54,6 +54,7 @@
 #include "TLorentzVector.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "BsToMuMuGammaAnalysis/RadiativeAnalysis/interface/RadiativeRootTree.h"
+#include "DataFormats/PatCandidates/interface/Photon.h"
 
 
 class RadiativeAnalysis : public edm::one::EDAnalyzer<edm::one::SharedResources> {
@@ -165,11 +166,11 @@ private:
   unsigned int event_counter_;
   unsigned int elecounter_;
   unsigned int muoncounter_;
+  unsigned int jetcounter_;
   unsigned int photoncounter_;
 
   int    isCowboy              = 0;
   double MuonsDCA              = -9999999;
-  int    VtxIndex              = -99;
   double kaonmass              = 0.493677;
   double pionmass              = 0.139570; 
   double DeltaRPhotonJpsi      = -9999999;
@@ -177,23 +178,8 @@ private:
   double JpsiPhotonDCA         = -9999999;
   double PsiPhotonDCA          = -9999999;
   double minVtxP               = -9999999; 
-//====================================================Beam Spot
-  double BSx         = -9999999.;
-  double BSy         = -9999999.;
-  double BSz         = -9999999.;
-  double BSdx        = -9999999.;
-  double BSdy        = -9999999.;
-  double BSdz        = -9999999.;
-  double BSdxdz      = -9999999.;
-  double BSdydz      = -9999999.;
-  double BSsigmaZ    = -9999999.;
-  double BSdsigmaZ   = -9999999.;
-//========================================================PV
-  double PVx         = -9999999.;
-  double PVy         = -9999999.;
-  double PVz         = -9999999.;
-  double PVerrx      = -9999999.;
-  double PVerry      = -9999999.;
-  double PVerrz      = -9999999.;
+  double MinPtVertex = 0.0;
+  int    NSelectedVertices;
+  double PtSumVertex = 0.0;
 };
 #endif

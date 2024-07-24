@@ -15,7 +15,7 @@ from PhysicsTools.PatAlgos.tools.coreTools import *
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 from PhysicsTools.PatAlgos.tools.pfTools import *
 
-process.maxEvents = cms.untracked.PSet(  input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet(  input = cms.untracked.int32(2000) )
 process.source = cms.Source("PoolSource",
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
                             skipEvents = cms.untracked.uint32(0),
@@ -72,7 +72,7 @@ process.bmmgVertexAnalysis = cms.EDAnalyzer("RadiativeAnalysis",
                                           genParticlesLabel             = cms.InputTag("prunedGenParticles"),
                                           MuonTag                       = cms.InputTag("slimmedMuons"),
                                           JetTag                        = cms.InputTag("slimmedJets"),
-                                          PhotonTag                     = cms.InputTag("slimmedPhoton"),
+                                          PhotonTag                     = cms.InputTag("slimmedPhotons"),
                                           OOTPhotonTag                  = cms.InputTag("slimmedOOTPhotons"),
                                           ElectronTag                   = cms.InputTag("slimmedElectrons"),
                                           SuperClusterTag               = cms.InputTag("reducedEgamma","reducedSuperClusters","PAT"),
@@ -153,5 +153,3 @@ process.primaryVertexFilter = cms.EDFilter("GoodVertexFilter",
 process.ntup = cms.Path(process.bmmgVertexAnalysis )
 #process.filter = cms.Path(process.noScraping)
 process.schedule = cms.Schedule(process.ntup)
-
-

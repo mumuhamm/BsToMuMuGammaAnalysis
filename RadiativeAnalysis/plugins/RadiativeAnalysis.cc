@@ -132,7 +132,7 @@
 #include "DataFormats/PatCandidates/interface/IsolatedTrack.h"
 #include "DataFormats/Math/interface/LorentzVector.h"
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
-
+#include "DataFormats/PatCandidates/interface/Photon.h"
 using namespace reco;
 using namespace edm;
 using namespace std;
@@ -173,7 +173,7 @@ RadiativeAnalysis::RadiativeAnalysis(const edm::ParameterSet& iConfig):
 	triggerresults                    = iConfig.getParameter<edm::InputTag>("triggerresults");
         triggerresultsTok                 = consumes<edm::TriggerResults>(triggerresults);
 	pfCandTag                         = iConfig.getParameter<edm::InputTag>("pfCandTag");
-        pfCandTagTok                      = consumes<edm::View<pat::PackedCandidate>>(pfCandTok);
+        pfCandTagTok                      = consumes<edm::View<pat::PackedCandidate>>(pfCandTag);
 	IsoTrackTag                       = iConfig.getParameter<edm::InputTag>("IsoTrackTag");
         IsoTrackTagTok                    = consumes<edm::View<pat::IsolatedTrack>>(IsoTrackTag);
         trackBuilderTok                   = esConsumes(edm::ESInputTag("", "TransientTrackBuilder"));
@@ -199,11 +199,11 @@ RadiativeAnalysis::RadiativeAnalysis(const edm::ParameterSet& iConfig):
 	event_counter_ = 0;
         elecounter_    = 0;
         muoncounter_   = 0;
-        jetcounter_    = 0;
+	jetcounter_    = 0;
         tagmucounter_  = 0;
 	photoncounter_ = 0;
 
-
+edm::LogInfo("BsToMuMuGammaAnalysis/RadiativeAnalysis")<< "Initializing Bs to MuMu Gamma  analyser  - Output file: " << outputFile_ <<"\n";
 }
 
 RadiativeAnalysis::~RadiativeAnalysis() {}
@@ -212,21 +212,184 @@ void RadiativeAnalysis::beginJob() {
   bmmgRootTree_->createTree(outputFile_);
 }
 
+void RadiativeAnalysis::endJob() {
+  bmmgRootTree_->writeFile();
+  delete bmmgRootTree_;
+  cout << "Total number of Events          : " << event_counter_ << endl;
+  cout << "Total number of Tagged muons    : " << muoncounter_   << endl;
+  cout << "Total number of Tagged electrons: " << elecounter_    << endl;
+  cout << "Total number of Tagged jets     : " << jetcounter_    << endl;
+  cout << "Max amount of Tag muons         : " << tagmucounter_ <<  endl;
+  cout << "Max number of photon            : " << photoncounter_ << endl;
+}
+
 // ------------ method called for each event  ------------
 void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
-  using namespace edm;
+
+	event_counter_++;
+	bmmgRootTree_->resetEntries();
+	bmmgRootTree_->runNumber_   = iEvent.id().run();
+        bmmgRootTree_->eventNumber_ = (unsigned int)iEvent.id().event();
+        bmmgRootTree_->lumiSection_ = iEvent.luminosityBlock();
+	if(isMCstudy_){
 
 
-#ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
-  // if the SetupData is always needed
-  auto setup = iSetup.getData(setupToken_);
-  // if need the ESHandle to check if the SetupData was there or not
-  auto pSetup = iSetup.getHandle(setupToken_);
-#endif
+		edm:: Handle<edm::View<PileupSummaryInfo> > PUinfo;
+                iEvent.getByToken( PUInfoTok, PUinfo);
+                edm::View<PileupSummaryInfo>::const_iterator PVI;
+                int numInteraction = 0;
+		int numTrueInteraction =0;
+                for(PVI = PUinfo->begin(); PVI != PUinfo->end(); ++PVI){
+			if (PVI->getBunchCrossing()==0){
+				numTrueInteraction += PVI->getTrueNumInteractions();
+				numInteraction += PVI->getPU_NumInteractions();
+			}
+		}
+		bmmgRootTree_->PUinteraction_ = numInteraction;
+		bmmgRootTree_->PUTrueinteraction_ = numTrueInteraction;
+	}
+
+
+	int    VtxIndex              = -99;
+	//====================================================Beam Spot
+  double BSx         = -9999999.;
+  double BSy         = -9999999.;
+  double BSz         = -9999999.;
+  double BSdx        = -9999999.;
+  double BSdy        = -9999999.;
+  double BSdz        = -9999999.;
+  double BSdxdz      = -9999999.;
+  double BSdydz      = -9999999.;
+  double BSsigmaZ    = -9999999.;
+  double BSdsigmaZ   = -9999999.;
+//========================================================PV
+  double PVx         = -9999999.;
+  double PVy         = -9999999.;
+  double PVz         = -9999999.;
+  double PVerrx      = -9999999.;
+  double PVerry      = -9999999.;
+  double PVerrz      = -9999999.;
+	edm::Handle<reco::BeamSpot> vertexBeamSpot ;
+	iEvent.getByToken(vertexBeamSpotTok,vertexBeamSpot);
+	BSx = vertexBeamSpot->x0();
+	BSy = vertexBeamSpot->y0();
+	BSz = vertexBeamSpot->z0();
+	BSdx = vertexBeamSpot->x0Error();
+	BSdy = vertexBeamSpot->y0Error();
+	BSdz = vertexBeamSpot->z0Error();
+	BSdxdz = vertexBeamSpot->dxdz();
+	BSdydz = vertexBeamSpot->dydz();
+	BSsigmaZ = vertexBeamSpot->sigmaZ();
+	BSdsigmaZ = vertexBeamSpot->sigmaZ0Error();
+
+	
+	edm::Handle<edm::View<reco::Vertex>> recVtxs;
+	iEvent.getByToken(primaryvertexTok, recVtxs);
+	if(recVtxs->empty())return;
+        bmmgRootTree_->NVerticesbeforecut_ = recVtxs->size();	
+	NSelectedVertices = 0; 
+	/*for (const auto& vertex : *recVtxs) {
+		for (auto trackRef = vertex.tracks_begin(); trackRef != vertex.tracks_end(); ++trackRef) {
+			std::cout << "Referenced track key: " << trackRef->key() << "\n";
+			std::cout << "Referenced track weight: " << vertex.trackWeight(*trackRef) << "\n";
+		}
+	}*/
+	
+	for (size_t iVtx = 0; iVtx < recVtxs->size(); ++iVtx) {
+		VtxIndex = iVtx;
+		const reco::Vertex& vtx = (*recVtxs)[iVtx];
+		int iteratorCov =0;
+		for(int i = 0; i < 3 ; ++i){
+			for(int j =0; j< 3; ++j){
+				bmmgRootTree_->PVcovariance_[iteratorCov++] = vtx.covariance(i, j);
+			}
+		}
+
+	        bmmgRootTree_->PVndof_ = vtx.ndof();
+	        bmmgRootTree_->PVrho_ = vtx.position().Rho();
+	        if(!vtx.isValid())continue;
+	        if(vtx.isFake())continue;
+	        if(vtx.ndof() < 4)continue;
+	        if(fabs(vtx.z()) >= 24.0)continue;
+	        if(vtx.position().Rho() >= 2)continue;	
+	 	NSelectedVertices++;
+   
+
+			 /*for(reco::Vertex::trackRef_iterator trackRef = vtx.tracks_begin(); trackRef !=vtx.tracks_end(); ++trackRef){
+				 const reco::TrackBaseRef& vtx_trackRef = *trackRef;
+				 if (vtx_trackRef.isNonnull() && vtx_trackRef.isAvailable()) {
+					 const reco::Track& VtxTrack = *vtx_trackRef.castTo<reco::TrackRef>();
+					 PtSumVertex += std::abs(VtxTrack.pt());
+				 }
+				 else {
+					 std::cout << "Invalid track reference : "<<"\n";
+				 }
+			 }
+			 if (PtSumVertex >  MinPtVertex) {
+				 VtxIndex = iVtx;
+				 MinPtVertex = PtSumVertex;
+				 std::cout<<" min/max pt sum vertex : "<< MinPtVertex <<"\t"<< " & veretx index : " << VtxIndex<< "\n";
+			 }*/
+		 
+	}
+	bmmgRootTree_->NVerticesaftercut_ = NSelectedVertices;
+	
+	const Vertex &RecVtx = (*recVtxs)[VtxIndex];
+	if(VtxIndex !=-99) {
+		bmmgRootTree_->isPV_ = 1;
+		PVx = RecVtx.x();
+		PVy= RecVtx.y();
+		PVz= RecVtx.z();
+		PVerrx=RecVtx.xError();
+		PVerry=RecVtx.yError();
+		PVerrz=RecVtx.zError();
+	}
+	else { 
+		bmmgRootTree_->isBS_ = 1;
+		PVx=BSx;
+		PVy=BSy;
+		PVz=BSz;
+		PVerrx=BSdx;
+		PVerry=BSdy;
+		PVerrz=BSdz;
+	}
+	bmmgRootTree_->getVtx(BSx,BSy,BSz,PVx,PVy,PVz,PVerrx,PVerry,PVerrz);
+	bmmgRootTree_->BSdx_       = BSdx;
+        bmmgRootTree_->BSdy_       = BSdy;
+        bmmgRootTree_->BSdz_       = BSdz;
+        bmmgRootTree_->BSsigmaZ_   = BSsigmaZ;
+        bmmgRootTree_->BSdsigmaZ_  = BSdsigmaZ;
+        bmmgRootTree_->BSdxdz_     = BSdxdz;
+        bmmgRootTree_->BSdydz_     = BSdydz;
+
+	edm::Handle<edm::View<pat::Photon>> photon;
+        iEvent.getByToken(PhotonTagTok, photon);
+        bmmgRootTree_->photonMultiplicity_ = photon->size();
+	for(size_t iPhoton =0 ; iPhoton < photon->size() ; ++iPhoton){
+		photoncounter_++;
+		const pat::Photon& patPhoton = (*photon)[iPhoton];
+		bmmgRootTree_->photonPt_   = patPhoton.pt();
+		bmmgRootTree_->photonEta_  = patPhoton.eta();
+		bmmgRootTree_->photonPhi_  = patPhoton.phi();
+
+		std::cout << " photn info \n"
+			<<patPhoton.trackIso() <<"\n"
+			<<patPhoton.ecalIso() <<"\t"<< patPhoton.hcalIso() << "\t"<< patPhoton.caloIso()<< "\t";
+	}
+
+
+
+
+
+
+	
+
+
+
+
+bmmgRootTree_->fill();
 }
-void RadiativeAnalysis::endJob() {
-  // please remove this method if not needed
-}
+
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void RadiativeAnalysis::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
