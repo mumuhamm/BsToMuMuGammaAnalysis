@@ -29,10 +29,6 @@ class RadiativeRootTree {
 		 int    PUTrueinteraction_;
                  unsigned int eventNumber_;
                  int    lumiSection_;
- 		 int    photonMultiplicity_;
-		 double photonPt_;
-		 double photonEta_;
-		 double photonPhi_;
 		 int    isPV_;
 		 int    NVerticesbeforecut_;
 		 int    NVerticesaftercut_;
@@ -58,6 +54,17 @@ class RadiativeRootTree {
 		 double dedxTrk_;
 		 double errdedxTrk_;
 		 int    numdedxTrk_;
+		 int    photonMultiplicity_;
+                 double photonPt_;
+                 double photonEta_;
+                 double photonPhi_;
+		 double photonTrkIso_;
+		 double photonEcalIso_;
+		 double photonHcalIso_;
+		 double photonCaloIso_;
+		 int    electronMultiplicity_;
+		 int    pfCandMultiplicity_;
+
 		 double costheta_;
 		 double phi_;
 		 double cospsi_;

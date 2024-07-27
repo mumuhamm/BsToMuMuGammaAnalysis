@@ -1,7 +1,6 @@
-<use name="DataFormats/TrackReco"/>
-<use name="FWCore/Framework"/>
-<use name="FWCore/ParameterSet"/>
-<use name="FWCore/PluginManager"/>
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/ParameterSet"/>
+<use   name="FWCore/PluginManager"/>
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="TrackingTools/Records"/>
 <use   name="TrackingTools/IPTools"/>
@@ -22,5 +21,5 @@
 <use   name="MuonAnalysis/MuonAssociators"/>
 <use   name="DataFormats/PatCandidates"/>
 <use   name="CommonTools/CandUtils"/>
-<use   name="BsToMuMuGammaAnalysis/RadiativeAnalysis/interface"/>
+<use   name="DataFormats/EgammaCandidates"/>
 <flags EDM_PLUGIN="1"/>

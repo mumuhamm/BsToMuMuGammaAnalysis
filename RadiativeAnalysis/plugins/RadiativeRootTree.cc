@@ -47,11 +47,17 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("dedxTrk",&dedxTrk_,"dedxTrk/D");
   bmmgTree_->Branch("errdedxTrk",&errdedxTrk_,"errdedxTrk/D");
   bmmgTree_->Branch("numdedxTrk",&numdedxTrk_,"numdedxTrk/I");
-  bmmgTree_->Branch("costheta",&costheta_,"costheta/D");
   bmmgTree_->Branch("photonMultiplicity", &photonMultiplicity_,"photonMultiplicity/I");
   bmmgTree_->Branch("photonPt",&photonPt_,"photonPt/D");
   bmmgTree_->Branch("photonEta",&photonEta_,"photonEta/D");
   bmmgTree_->Branch("photonPhi",&photonPhi_,"photonPhi/D");
+  bmmgTree_->Branch("photonTrkIso",&photonTrkIso_,"photonTrkIso/D");
+  bmmgTree_->Branch("photonEcalIso",&photonEcalIso_,"photonEcalIso/D");
+  bmmgTree_->Branch("photonHcalIso",&photonHcalIso_,"photonHcalIso/D");
+  bmmgTree_->Branch("photonCaloIso",&photonCaloIso_,"photonCaloIso/D");
+  bmmgTree_->Branch("electronMultiplicity",&electronMultiplicity_,"electronMultiplicity/D");
+  bmmgTree_->Branch("pfCandMultiplicity",&pfCandMultiplicity_,"pfCandMultiplicity/D");
+  bmmgTree_->Branch("costheta",&costheta_,"costheta/D");
   bmmgTree_->Branch("phi",&phi_,"phi/D");
   bmmgTree_->Branch("cospsi",&cospsi_,"cospsi/D");
   bmmgTree_->Branch("AngleBsDecayLength",&AngleBsDecayLength_,"AngleBsDecayLength/D");
@@ -107,6 +113,12 @@ void RadiativeRootTree::resetEntries()
 	photonPt_           = -9999999;
         photonEta_          = -9999999;
         photonPhi_          = -9999999;
+	photonTrkIso_       = -9999999;
+	photonEcalIso_        = -9999999;
+	photonHcalIso_        = -9999999;
+	photonCaloIso_        = -9999999;
+	electronMultiplicity_ = -9999999;
+	pfCandMultiplicity_   = -9999999;
 	for(int i=0; i<9;++i){PVcovariance_[i] = -9999999;}
 }
 
@@ -196,5 +208,11 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress("photonPt", &photonPt_ );
   bmmgTree_->SetBranchAddress("photonEta", &photonEta_ );
   bmmgTree_->SetBranchAddress("photonPhi", &photonPhi_ );
+  bmmgTree_->SetBranchAddress("photonTrkIso", &photonTrkIso_);
+  bmmgTree_->SetBranchAddress("photonEcalIso", &photonEcalIso_);
+  bmmgTree_->SetBranchAddress("photonHcalIso", &photonHcalIso_);
+  bmmgTree_->SetBranchAddress("photonCaloIso", &photonCaloIso_);
+  bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);
+  bmmgTree_->SetBranchAddress("pfCandMultiplicity", &pfCandMultiplicity_);
 }
 
