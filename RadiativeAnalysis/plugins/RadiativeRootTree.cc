@@ -55,6 +55,18 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("photonEcalIso",&photonEcalIso_,"photonEcalIso/D");
   bmmgTree_->Branch("photonHcalIso",&photonHcalIso_,"photonHcalIso/D");
   bmmgTree_->Branch("photonCaloIso",&photonCaloIso_,"photonCaloIso/D");
+  bmmgTree_->Branch("photonSigmaiEtaiEta",&photonSigmaiEtaiEta_,"photonSigmaiEtaiEta/D");
+  bmmgTree_->Branch("photonSigmaiEtaiPhi",&photonSigmaiEtaiPhi_,"photonSigmaiEtaiPhi/D");
+  bmmgTree_->Branch("photonSigmaiPhiiPhi",&photonSigmaiPhiiPhi_,"photonSigmaiPhiiPhi/D");
+  bmmgTree_->Branch("photonSigmaEtaEta",&photonSigmaEtaEta_,"photonSigmaEtaEta/D");
+  bmmgTree_->Branch("photone1x5",&photone1x5_,"photone1x5/D");
+  bmmgTree_->Branch("photone2x5",&photone2x5_,"photone2x5/D");
+  bmmgTree_->Branch("photone3x3",&photone3x3_,"photone3x3/D");
+  bmmgTree_->Branch("photone5x5",&photone5x5_,"photone5x5/D");
+  bmmgTree_->Branch("photonhcalDepth1OverEcal",&photonhcalDepth1OverEcal_,"photonhcalDepth1OverEcal/D");
+  bmmgTree_->Branch("photonhcalDepth2OverEcal",&photonhcalDepth2OverEcal_,"photonhcalDepth2OverEcal/D");
+  bmmgTree_->Branch("photonhcalDepth1OverEcalBc",&photonhcalDepth1OverEcalBc_,"photonhcalDepth1OverEcal/D");
+  bmmgTree_->Branch("photonhcalDepth2OverEcalBc",&photonhcalDepth2OverEcalBc_,"photonhcalDepth2OverEcalBc/D");
   bmmgTree_->Branch("electronMultiplicity",&electronMultiplicity_,"electronMultiplicity/D");
   bmmgTree_->Branch("pfCandMultiplicity",&pfCandMultiplicity_,"pfCandMultiplicity/D");
   bmmgTree_->Branch("costheta",&costheta_,"costheta/D");
@@ -117,6 +129,18 @@ void RadiativeRootTree::resetEntries()
 	photonEcalIso_        = -9999999;
 	photonHcalIso_        = -9999999;
 	photonCaloIso_        = -9999999;
+	photonSigmaiEtaiEta_  = -9999999;
+	photonSigmaiEtaiPhi_  = -9999999;
+	photonSigmaiPhiiPhi_  = -9999999;
+	photonSigmaEtaEta_    = -9999999;
+	photone1x5_           = -9999999;
+	photone2x5_           = -9999999;
+	photone3x3_           = -9999999;
+	photone5x5_           = -9999999;
+	photonhcalDepth1OverEcal_ = -9999999;
+	photonhcalDepth2OverEcal_ = -9999999;
+	photonhcalDepth1OverEcalBc_ = -9999999;
+	photonhcalDepth2OverEcalBc_ = -9999999;
 	electronMultiplicity_ = -9999999;
 	pfCandMultiplicity_   = -9999999;
 	for(int i=0; i<9;++i){PVcovariance_[i] = -9999999;}
@@ -212,6 +236,18 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress("photonEcalIso", &photonEcalIso_);
   bmmgTree_->SetBranchAddress("photonHcalIso", &photonHcalIso_);
   bmmgTree_->SetBranchAddress("photonCaloIso", &photonCaloIso_);
+  bmmgTree_->SetBranchAddress("photonSigmaiEtaiEta", &photonSigmaiEtaiEta_);
+  bmmgTree_->SetBranchAddress("photonSigmaiEtaiPhi", &photonSigmaiEtaiPhi_);
+  bmmgTree_->SetBranchAddress("photonSigmaiPhiiPhi", &photonSigmaiPhiiPhi_);
+  bmmgTree_->SetBranchAddress("photonSigmaEtaEta", &photonSigmaEtaEta_);
+  bmmgTree_->SetBranchAddress("photone1x5", &photone1x5_);
+  bmmgTree_->SetBranchAddress("photone2x5", &photone2x5_);
+  bmmgTree_->SetBranchAddress("photone3x3", &photone3x3_);
+  bmmgTree_->SetBranchAddress("photone5x5", &photone5x5_);
+  bmmgTree_->SetBranchAddress("photonhcalDepth1OverEcal", &photonhcalDepth1OverEcal_);
+  bmmgTree_->SetBranchAddress("photonhcalDepth2OverEcal", &photonhcalDepth2OverEcal_);
+  bmmgTree_->SetBranchAddress("photonhcalDepth1OverEcalBc", &photonhcalDepth1OverEcalBc_);
+  bmmgTree_->SetBranchAddress("photonhcalDepth2OverEcal", &photonhcalDepth2OverEcalBc_);
   bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);
   bmmgTree_->SetBranchAddress("pfCandMultiplicity", &pfCandMultiplicity_);
 }

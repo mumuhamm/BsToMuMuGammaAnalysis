@@ -62,6 +62,18 @@ class RadiativeRootTree {
 		 double photonEcalIso_;
 		 double photonHcalIso_;
 		 double photonCaloIso_;
+		 double photonSigmaiEtaiEta_;
+		 double photonSigmaiEtaiPhi_;
+		 double photonSigmaiPhiiPhi_;
+		 double photonSigmaEtaEta_;
+		 double photone1x5_;
+		 double photone2x5_;
+		 double photone3x3_;
+		 double photone5x5_;
+		 double photonhcalDepth1OverEcal_;
+		 double photonhcalDepth2OverEcal_;
+		 double photonhcalDepth1OverEcalBc_;
+		 double photonhcalDepth2OverEcalBc_;
 		 int    electronMultiplicity_;
 		 int    pfCandMultiplicity_;
 

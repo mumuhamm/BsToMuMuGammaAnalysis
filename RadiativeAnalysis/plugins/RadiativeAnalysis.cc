@@ -375,18 +375,19 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 			const reco::Photon::ShowerShape& jShowerShape = jpatPhoton.full5x5_showerShapeVariables();
 			std::cout << "Photon " << jPhoton << " shower shape variable: " << jShowerShape.sigmaIetaIeta << std::endl;
 
-			/*std::cout << " sigmaIetaIeta: " << showerShape.sigmaIetaIeta << std::endl;
-        std::cout << " sigmaEtaEta: " << showerShape.sigmaEtaEta << std::endl;
-        std::cout << " e1x5: " << showerShape.e1x5 << std::endl;
-        std::cout << " e2x5: " << showerShape.e2x5 << std::endl;
-        std::cout << " e3x3: " << showerShape.e3x3 << std::endl;
-        std::cout << " e5x5: " << showerShape.e5x5 << std::endl;
-        std::cout << " maxEnergyXtal: " << showerShape.maxEnergyXtal << std::endl;
-        std::cout << " hcalDepth1OverEcal: " << showerShape.hcalDepth1OverEcal << std::endl;
-        std::cout << " hcalDepth2OverEcal: " << showerShape.hcalDepth2OverEcal << std::endl;
-        std::cout << " hcalDepth1OverEcalBc: " << showerShape.hcalDepth1OverEcalBc << std::endl;
-        std::cout << " hcalDepth2OverEcalBc: " << showerShape.hcalDepth2OverEcalBc << std::endl;
+			std::cout << " sigmaIetaIeta: " << jShowerShape.sigmaIetaIeta << std::endl;
+			std::cout << " sigmaEtaEta: " << jShowerShape.sigmaEtaEta << std::endl;
+        std::cout << " e1x5: " << jShowerShape.e1x5 << std::endl;
+        std::cout << " e2x5: " << jShowerShape.e2x5 << std::endl;
+        std::cout << " e3x3: " << jShowerShape.e3x3 << std::endl;
+        std::cout << " e5x5: " << jShowerShape.e5x5 << std::endl;
+        std::cout << " maxEnergyXtal: " << jShowerShape.maxEnergyXtal << std::endl;
+        std::cout << " hcalDepth1OverEcal: " << jShowerShape.hcalDepth1OverEcal << std::endl;
+        std::cout << " hcalDepth2OverEcal: " << jShowerShape.hcalDepth2OverEcal << std::endl;
+        std::cout << " hcalDepth1OverEcalBc: " << jShowerShape.hcalDepth1OverEcalBc << std::endl;
+        std::cout << " hcalDepth2OverEcalBc: " << jShowerShape.hcalDepth2OverEcalBc << std::endl;
 
+	/*
         // Initialize arrays to zero before filling them
         std::fill(std::begin(bmmgRootTree_->hcalOverEcal_), std::end(bmmgRootTree_->hcalOverEcal_), 0.f);
         std::fill(std::begin(bmmgRootTree_->hcalOverEcalBc_), std::end(bmmgRootTree_->hcalOverEcalBc_), 0.f);
@@ -398,24 +399,36 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         for (size_t k = 0; k < showerShape.hcalOverEcalBc.size(); ++k) {
             bmmgRootTree_->hcalOverEcalBc_[k] = showerShape.hcalOverEcalBc[k];
         }
-
+*/
         std::cout << " hcalOverEcal: ";
-        for (const auto& hcalValue : showerShape.hcalOverEcal) {
+        for (const auto& hcalValue : jShowerShape.hcalOverEcal) {
             std::cout << hcalValue << " ";
         }
         std::cout << std::endl;
         
         std::cout << " hcalOverEcalBc: ";
-        for (const auto& hcalBcValue : showerShape.hcalOverEcalBc) {
+        for (const auto& hcalBcValue : jShowerShape.hcalOverEcalBc) {
             std::cout << hcalBcValue << " ";
         }
-        std::cout << std::endl;*/
+        std::cout << std::endl;
                                              
 
 
 
 
-
+	                const reco::Photon::ShowerShape& iShowerShape = ipatPhoton.full5x5_showerShapeVariables();
+                        bmmgRootTree_->photonSigmaiEtaiEta_ = iShowerShape.sigmaIetaIeta;
+			bmmgRootTree_->photonSigmaiEtaiPhi_ = iShowerShape.sigmaIetaIphi;
+			bmmgRootTree_->photonSigmaiPhiiPhi_ = iShowerShape.sigmaIphiIphi;
+			bmmgRootTree_->photonSigmaEtaEta_ = iShowerShape.sigmaEtaEta;
+			bmmgRootTree_->photone1x5_ = iShowerShape.e1x5;
+			bmmgRootTree_->photone2x5_ = iShowerShape.e2x5;
+			bmmgRootTree_->photone3x3_ = iShowerShape.e3x3;
+			bmmgRootTree_->photone5x5_ = iShowerShape.e5x5;
+			bmmgRootTree_->photonhcalDepth1OverEcal_ = iShowerShape.hcalDepth1OverEcal;
+			bmmgRootTree_->photonhcalDepth2OverEcal_ = iShowerShape.hcalDepth2OverEcal;
+			bmmgRootTree_->photonhcalDepth1OverEcalBc_ = iShowerShape.hcalDepth1OverEcalBc;
+			bmmgRootTree_->photonhcalDepth2OverEcalBc_ = iShowerShape.hcalDepth2OverEcalBc;
 			bmmgRootTree_->photonPt_   = ipatPhoton.pt();
 			bmmgRootTree_->photonEta_  = ipatPhoton.eta();
 			bmmgRootTree_->photonPhi_  = ipatPhoton.phi();
