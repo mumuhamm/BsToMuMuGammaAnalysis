@@ -91,7 +91,19 @@ class RadiativeRootTree {
 		 double photonSCBrem_;
 		 double photonSCR9_;
 		 double photonSCHadTowOverEm_;
-
+		 double PiZeroM_alone_;
+		 double PiZeroEta_alone_;
+		 double PiZeroPhi_alone_;
+		 double PiZeroPt_alone_;
+		 double EtaMesonM_alone_;
+		 double EtaMesonEta_alone_;
+		 double EtaMesonPhi_alone_;
+		 double EtaMesonPt_alone_;
+		 double EtaPrimeM_alone_;
+		 double EtaPrimeEta_alone_;
+		 double EtaPrimePhi_alone_;
+		 double EtaPrimePt_alone_;
+		 
 		 int    electronMultiplicity_;
 		 int    pfCandMultiplicity_;
 

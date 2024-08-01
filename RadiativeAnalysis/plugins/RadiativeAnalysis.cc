@@ -146,7 +146,10 @@ RadiativeAnalysis::RadiativeAnalysis(const edm::ParameterSet& iConfig):
 	nominalPsiMass( 3.096916 ),
 	nominalPhiMass(1.019 ),
 	nominalElectronMass(0.00051099893),
-	nominalMuonMass(0.1056583)
+	nominalMuonMass(0.1056583),
+	nominalPiZeroMass(0.1349768),
+	nominalEtaMesonMass(0.547862),
+	nominalEtaPrimeMass(0.957780)
 {
 	isMCstudy_ = iConfig.getParameter<bool>("isMCstudy");
 	genParticlesLabel                 = iConfig.getParameter<InputTag>("genParticlesLabel");
@@ -181,18 +184,25 @@ RadiativeAnalysis::RadiativeAnalysis(const edm::ParameterSet& iConfig):
 
 
 	StoreDeDxInfo_                    = iConfig.getParameter<bool>("StoreDeDxInfo");
+	PionZeroMassWindowNoFit_          = iConfig.getParameter<double>("PionZeroMassWindowNoFit");
         JpsiMassWindowBeforeFit_          = iConfig.getParameter<double>("JpsiMassWindowBeforeFit");
         JpsiMassWindowAfterFit_           = iConfig.getParameter<double>("JpsiMassWindowAfterFit");
         JpsiPtCut_                        = iConfig.getParameter<double>("JpsiPtCut");
 	PsiMassWindowBeforeFit_           = iConfig.getParameter<double>("PsiMassWindowBeforeFit");
         PsiMassWindowAfterFit_            = iConfig.getParameter<double>("PsiMassWindowAfterFit");
+	EtaMesonMassWindowNoFit_          = iConfig.getParameter<double>("EtaMesonMassWindowNoFit");
+	EtaPrimeMassWindowNoFit_          = iConfig.getParameter<double>("EtaPrimeMassWindowNoFit");
 	BsLowerMassCutBeforeFit_          = iConfig.getParameter<double>("BsLowerMassCutBeforeFit");
         BsUpperMassCutBeforeFit_          = iConfig.getParameter<double>("BsUpperMassCutBeforeFit");
         BsLowerMassCutAfterFit_           = iConfig.getParameter<double>("BsLowerMassCutAfterFit");
         BsUpperMassCutAfterFit_           = iConfig.getParameter<double>("BsUpperMassCutAfterFit");
+	PionZeroPDGMass_                  = iConfig.getParameter<double>("PionZeroPDGMass");
 	BdPDGMass_                        = iConfig.getParameter<double>("BdPDGMass");
         BpPDGMass_                        = iConfig.getParameter<double>("BpPDGMass");
         BsPDGMass_                        = iConfig.getParameter<double>("BsPDGMass");
+	PionZeroPDGMass_                  = iConfig.getParameter<double>("PionZeroPDGMass");
+	EtaMesonPDGMass_                  = iConfig.getParameter<double>("EtaMesonPDGMass");
+	EtaPrimePDGMass_                  = iConfig.getParameter<double>("EtaPrimePDGMass");
 	outputFile_                       = iConfig.getUntrackedParameter<std::string>("outputFile");
 	verbose_                          = iConfig.getParameter<bool>("verbose");
         TestVerbose_                      = iConfig.getParameter<bool>("TestVerbose");
@@ -253,23 +263,29 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
 	int    VtxIndex              = -99;
 	//====================================================Beam Spot
-  double BSx         = -9999999.;
-  double BSy         = -9999999.;
-  double BSz         = -9999999.;
-  double BSdx        = -9999999.;
-  double BSdy        = -9999999.;
-  double BSdz        = -9999999.;
-  double BSdxdz      = -9999999.;
-  double BSdydz      = -9999999.;
-  double BSsigmaZ    = -9999999.;
-  double BSdsigmaZ   = -9999999.;
-//========================================================PV
-  double PVx         = -9999999.;
-  double PVy         = -9999999.;
-  double PVz         = -9999999.;
-  double PVerrx      = -9999999.;
-  double PVerry      = -9999999.;
-  double PVerrz      = -9999999.;
+        double BSx         = -9999999.;
+	double BSy         = -9999999.;
+	double BSz         = -9999999.;
+	double BSdx        = -9999999.;
+	double BSdy        = -9999999.;
+	double BSdz        = -9999999.;
+	double BSdxdz      = -9999999.;
+	double BSdydz      = -9999999.;
+	double BSsigmaZ    = -9999999.;
+	double BSdsigmaZ   = -9999999.;
+	//========================================================PV
+	double PVx         = -9999999.;
+	double PVy         = -9999999.;
+	double PVz         = -9999999.;
+	double PVerrx      = -9999999.;
+	double PVerry      = -9999999.;
+	double PVerrz      = -9999999.;
+	
+	excludedPhotons.clear();	
+	
+	
+	
+	
 	edm::Handle<reco::BeamSpot> vertexBeamSpot ;
 	iEvent.getByToken(vertexBeamSpotTok,vertexBeamSpot);
 	BSx = vertexBeamSpot->x0();
@@ -367,45 +383,100 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         iEvent.getByToken(PhotonTagTok, photon);
         bmmgRootTree_->photonMultiplicity_ = photon->size();
 	for(size_t iPhoton =0 ; iPhoton < photon->size() ; ++iPhoton){
-		photoncounter_++;
+		
 		const pat::Photon& ipatPhoton = (*photon)[iPhoton];
+		if (excludedPhotons.find(iPhoton) != excludedPhotons.end()) continue;
+		bool photonExcluded = false;
+
 		for(size_t jPhoton = iPhoton+1; jPhoton < photon->size() ; ++jPhoton){
 
 			const pat::Photon& jpatPhoton = (*photon)[jPhoton];
 			const reco::Photon::ShowerShape& jShowerShape = jpatPhoton.full5x5_showerShapeVariables();
 
-			std::cout<< " the R9 : "<< ipatPhoton.r9() << "super cluster eta eidth : "<< ipatPhoton.superCluster()->etaWidth() << "\n";
-			std::cout<< " the phiwdth : "<< ipatPhoton.superCluster()->phiWidth()<< "\n";
+			pat::CompositeCandidate DiGammaCandidate;
+			DiGammaCandidate.addDaughter(ipatPhoton);
+			DiGammaCandidate.addDaughter(jpatPhoton);
+			AddFourMomenta addP4;
+			addP4.set(DiGammaCandidate);
 
+
+
+			if ( abs(DiGammaCandidate.mass() - nominalPiZeroMass ) <  PionZeroMassWindowNoFit_ ){
+			
+				excludedPhotons.insert(iPhoton);
+				excludedPhotons.insert(jPhoton);
+				photonExcluded = true;
+				bmmgRootTree_->PiZeroM_alone_        = DiGammaCandidate.mass();
+				bmmgRootTree_->PiZeroEta_alone_      = DiGammaCandidate.eta();
+				bmmgRootTree_->PiZeroPhi_alone_      = DiGammaCandidate.phi();
+				bmmgRootTree_->PiZeroPt_alone_       = DiGammaCandidate.pt();
+			}
+			else if (abs(DiGammaCandidate.mass() - nominalEtaMesonMass ) < EtaMesonMassWindowNoFit_){
+				
+				excludedPhotons.insert(iPhoton);
+				excludedPhotons.insert(jPhoton);
+				photonExcluded = true;
+				bmmgRootTree_->EtaMesonM_alone_   = DiGammaCandidate.mass();
+				bmmgRootTree_->EtaMesonEta_alone_ = DiGammaCandidate.eta();
+				bmmgRootTree_->EtaMesonPhi_alone_ = DiGammaCandidate.phi();
+				bmmgRootTree_->EtaMesonPt_alone_  = DiGammaCandidate.pt();
+			}
+			else if (abs(DiGammaCandidate.mass() - nominalEtaPrimeMass ) < EtaPrimeMassWindowNoFit_){
+
+                                excludedPhotons.insert(iPhoton);
+                                excludedPhotons.insert(jPhoton);
+                                photonExcluded = true;
+                                bmmgRootTree_->EtaPrimeM_alone_   = DiGammaCandidate.mass();
+                                bmmgRootTree_->EtaPrimeEta_alone_ = DiGammaCandidate.eta();
+                                bmmgRootTree_->EtaPrimePhi_alone_ = DiGammaCandidate.phi();
+                                bmmgRootTree_->EtaPrimePt_alone_  = DiGammaCandidate.pt();
+			}
+			if (photonExcluded) break; // Exit inner loop if current photon is excluded
+		}
+		        if (photonExcluded) continue;
 	                const reco::Photon::ShowerShape& iShowerShape = ipatPhoton.full5x5_showerShapeVariables();
                         bmmgRootTree_->photonSSSigmaiEtaiEta_ = iShowerShape.sigmaIetaIeta;
 			bmmgRootTree_->photonSSSigmaiEtaiPhi_ = iShowerShape.sigmaIetaIphi;
 			bmmgRootTree_->photonSSSigmaiPhiiPhi_ = iShowerShape.sigmaIphiIphi;
-			bmmgRootTree_->photonSSSigmaEtaEta_ = iShowerShape.sigmaEtaEta;
+			bmmgRootTree_->photonSSSigmaEtaEta_   = iShowerShape.sigmaEtaEta;
 			bmmgRootTree_->photonSSe1x5_ = iShowerShape.e1x5;
 			bmmgRootTree_->photonSSe2x5_ = iShowerShape.e2x5;
 			bmmgRootTree_->photonSSe3x3_ = iShowerShape.e3x3;
 			bmmgRootTree_->photonSSe5x5_ = iShowerShape.e5x5;
-			bmmgRootTree_->photonSShcalDepth1OverEcal_ = iShowerShape.hcalDepth1OverEcal;
-			bmmgRootTree_->photonSShcalDepth2OverEcal_ = iShowerShape.hcalDepth2OverEcal;
+			bmmgRootTree_->photonSShcalDepth1OverEcal_   = iShowerShape.hcalDepth1OverEcal;
+			bmmgRootTree_->photonSShcalDepth2OverEcal_   = iShowerShape.hcalDepth2OverEcal;
 			bmmgRootTree_->photonSShcalDepth1OverEcalBc_ = iShowerShape.hcalDepth1OverEcalBc;
 			bmmgRootTree_->photonSShcalDepth2OverEcalBc_ = iShowerShape.hcalDepth2OverEcalBc;
 			std::fill(std::begin(bmmgRootTree_->photonSShcalOverEcal_), std::end(bmmgRootTree_->photonSShcalOverEcal_), 0.f);
 			std::fill(std::begin(bmmgRootTree_->photonSShcalOverEcalBc_), std::end(bmmgRootTree_->photonSShcalOverEcalBc_), 0.f);
-			for (size_t k = 0; k < iShowerShape.hcalOverEcal.size(); ++k) {bmmgRootTree_->photonSShcalOverEcal_[k] = iShowerShape.hcalOverEcal[k];}
+			for (size_t k = 0; k < iShowerShape.hcalOverEcal.size(); ++k)   {bmmgRootTree_->photonSShcalOverEcal_[k]   = iShowerShape.hcalOverEcal[k];}
 			for (size_t k = 0; k < iShowerShape.hcalOverEcalBc.size(); ++k) {bmmgRootTree_->photonSShcalOverEcalBc_[k] = iShowerShape.hcalOverEcalBc[k];}
-			bmmgRootTree_->photonSSmaxEnergyXtal_ = iShowerShape.maxEnergyXtal;
-			bmmgRootTree_->photonSSeffSigmaRR_ = iShowerShape.effSigmaRR;
-			bmmgRootTree_->photonPt_   = ipatPhoton.pt();
-			bmmgRootTree_->photonEta_  = ipatPhoton.eta();
-			bmmgRootTree_->photonPhi_  = ipatPhoton.phi();
-			bmmgRootTree_->photonEnergy_  = ipatPhoton.energy();
-			bmmgRootTree_->photonET_      = ipatPhoton.et();
-			bmmgRootTree_->photonTrkIso_  = ipatPhoton.trackIso();
-			bmmgRootTree_->photonEcalIso_  = ipatPhoton.ecalIso();
-			bmmgRootTree_->photonHcalIso_  = ipatPhoton.hcalIso();
-			bmmgRootTree_->photonCaloIso_  = ipatPhoton.caloIso();
-		}	                       
+			bmmgRootTree_->photonSSmaxEnergyXtal_  = iShowerShape.maxEnergyXtal;
+			bmmgRootTree_->photonSSeffSigmaRR_     = iShowerShape.effSigmaRR;
+			
+			bmmgRootTree_->photonSCEnergy_         = ipatPhoton.superCluster()->energy();
+			bmmgRootTree_->photonSCRawEnergy_      = ipatPhoton.superCluster()->rawEnergy();
+			bmmgRootTree_->photonSCPreShowerEP1_   = ipatPhoton.superCluster()->preshowerEnergyPlane1();
+			bmmgRootTree_->photonSCPreShowerEP1_   = ipatPhoton.superCluster()->preshowerEnergyPlane2();
+			bmmgRootTree_->photonSCEta_            = ipatPhoton.superCluster()->eta();
+			bmmgRootTree_->photonSCPhi_            = ipatPhoton.superCluster()->phi();
+			bmmgRootTree_->photonSCEtaWidth_       = ipatPhoton.superCluster()->etaWidth();
+			bmmgRootTree_->photonSCPhiWidth_       = ipatPhoton.superCluster()->phiWidth();
+			bmmgRootTree_->photonSCBrem_           = ipatPhoton.superCluster()->phiWidth()/ipatPhoton.superCluster()->etaWidth();
+			bmmgRootTree_->photonSCR9_             = ipatPhoton.r9();
+			bmmgRootTree_->photonSCHadTowOverEm_   = ipatPhoton.hadTowOverEm();
+
+			bmmgRootTree_->photonPt_        = ipatPhoton.pt();
+			bmmgRootTree_->photonEta_       = ipatPhoton.eta();
+			bmmgRootTree_->photonPhi_       = ipatPhoton.phi();
+			bmmgRootTree_->photonEnergy_    = ipatPhoton.energy();
+			bmmgRootTree_->photonET_        = ipatPhoton.et();
+			bmmgRootTree_->photonTrkIso_    = ipatPhoton.trackIso();
+			bmmgRootTree_->photonEcalIso_   = ipatPhoton.ecalIso();
+			bmmgRootTree_->photonHcalIso_   = ipatPhoton.hcalIso();
+			bmmgRootTree_->photonCaloIso_   = ipatPhoton.caloIso();
+			photoncounter_++;
+		                       
 	}//photon loop ends 
 
 

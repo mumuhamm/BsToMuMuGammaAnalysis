@@ -84,6 +84,18 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("photonSCBrem",&photonSCBrem_,"photonSCBrem/D");
   bmmgTree_->Branch("photonSCR9",&photonSCR9_,"photonSCR9/D");
   bmmgTree_->Branch("photonSCHadTowOverEm",&photonSCHadTowOverEm_,"photonSCHadTowOverEm/D");
+  bmmgTree_->Branch("PiZeroM_alone",&PiZeroM_alone_,"PiZeroM_alone/D");
+  bmmgTree_->Branch("PiZeroEta_alone",&PiZeroEta_alone_,"PiZeroEta_alone/D");
+  bmmgTree_->Branch("PiZeroPhi_alone",&PiZeroPhi_alone_,"PiZeroPhi_alone/D");
+  bmmgTree_->Branch("PiZeroPt_alone",&PiZeroPt_alone_,"PiZeroPt_alone/D");
+  bmmgTree_->Branch("EtaMesonM_alone", &EtaMesonM_alone_, "EtaMesonM_alone/D");
+  bmmgTree_->Branch("EtaMesonEta_alone", &EtaMesonEta_alone_, "EtaMesonEta_alone/D");
+  bmmgTree_->Branch("EtaMesonPhi_alone", &EtaMesonPhi_alone_, "EtaMesonPhi_alone/D");
+  bmmgTree_->Branch("EtaMesonPt_alone", &EtaMesonPt_alone_, "EtaMesonPt_alone/D");
+  bmmgTree_->Branch("EtaPrimeM_alone", &EtaPrimeM_alone_, "EtaPrimeM_alone/D");
+  bmmgTree_->Branch("EtaPrimeEta_alone", &EtaPrimeEta_alone_, "EtaPrimeEta_alone/D");
+  bmmgTree_->Branch("EtaPrimePhi_alone", &EtaPrimePhi_alone_, "EtaPrimePhi_alone/D");
+  bmmgTree_->Branch("EtaPrimePt_alone", &EtaPrimePt_alone_, "EtaPrimePt_alone/D");
   bmmgTree_->Branch("electronMultiplicity",&electronMultiplicity_,"electronMultiplicity/D");
   bmmgTree_->Branch("pfCandMultiplicity",&pfCandMultiplicity_,"pfCandMultiplicity/D");
   bmmgTree_->Branch("costheta",&costheta_,"costheta/D");
@@ -175,8 +187,20 @@ void RadiativeRootTree::resetEntries()
 	photonSCBrem_           = -9999999;
 	photonSCR9_             = -9999999;
 	photonSCHadTowOverEm_   = -9999999;
-	electronMultiplicity_ = -9999999;
-	pfCandMultiplicity_   = -9999999;
+	PiZeroM_alone_          = -9999999;
+	PiZeroEta_alone_        = -9999999;
+	PiZeroPhi_alone_        = -9999999;
+	PiZeroPt_alone_         = -9999999;
+	EtaMesonM_alone_        = -9999999;
+	EtaMesonEta_alone_      = -9999999;
+	EtaMesonPhi_alone_      = -9999999;
+	EtaMesonPt_alone_       = -9999999;
+       	EtaPrimeM_alone_        = -9999999;
+	EtaPrimeEta_alone_      = -9999999;
+	EtaPrimePhi_alone_      = -9999999;
+	EtaPrimePt_alone_       = -9999999;
+	electronMultiplicity_   = -9999999;
+	pfCandMultiplicity_     = -9999999;
 	for(size_t i=0; i<9;++i){PVcovariance_[i] = -9999999;}
 }
 
@@ -290,8 +314,8 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress("photonSSeffSigmaRR", &photonSSeffSigmaRR_);
   bmmgTree_->SetBranchAddress("photonSCEnergy", &photonSCEnergy_);
   bmmgTree_->SetBranchAddress("photonSCRawEnergy", &photonSCRawEnergy_);
-  bmmgTree_->SetBranchAddress("photonSCPreShowerEP1", &photonSCPreshowerEP1_);
-  bmmgTree_->SetBranchAddress("photonSCPreShowerEP2", &photonSCPreshowerEP2_);
+  bmmgTree_->SetBranchAddress("photonSCPreShowerEP1", &photonSCPreShowerEP1_);
+  bmmgTree_->SetBranchAddress("photonSCPreShowerEP2", &photonSCPreShowerEP2_);
   bmmgTree_->SetBranchAddress("photonSCEta", &photonSCEta_);
   bmmgTree_->SetBranchAddress("photonSCPhi", &photonSCPhi_);
   bmmgTree_->SetBranchAddress("photonSCEtaWidth", &photonSCEtaWidth_);
@@ -299,6 +323,18 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress("photonSCBrem", &photonSCBrem_);
   bmmgTree_->SetBranchAddress("photonSCR9", &photonSCR9_);
   bmmgTree_->SetBranchAddress("photonSCHadTowOverEm", &photonSCHadTowOverEm_);
+  bmmgTree_->SetBranchAddress("PiZeroM_alone",     &PiZeroM_alone_);
+  bmmgTree_->SetBranchAddress("PiZeroEta_alone",   &PiZeroEta_alone_);
+  bmmgTree_->SetBranchAddress("PiZeroPhi_alone",   &PiZeroPhi_alone_);
+  bmmgTree_->SetBranchAddress("PiZeroPt_alone",    &PiZeroPt_alone_);
+  bmmgTree_->SetBranchAddress("EtaMesonM_alone",   &EtaMesonM_alone_);
+  bmmgTree_->SetBranchAddress("EtaMesonEta_alone", &EtaMesonEta_alone_);
+  bmmgTree_->SetBranchAddress("EtaMesonPhi_alone", &EtaMesonPhi_alone_);
+  bmmgTree_->SetBranchAddress("EtaMesonPt_alone",  &EtaMesonPt_alone_);
+  bmmgTree_->SetBranchAddress("EtaPrimeM_alone",   &EtaPrimeM_alone_);
+  bmmgTree_->SetBranchAddress("EtaPrimeEta_alone", &EtaPrimeEta_alone_);
+  bmmgTree_->SetBranchAddress("EtaPrimePhi_alone", &EtaPrimePhi_alone_);
+  bmmgTree_->SetBranchAddress("EtaPrimePt_alone",  &EtaPrimePt_alone_);
   bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);
   bmmgTree_->SetBranchAddress("pfCandMultiplicity", &pfCandMultiplicity_);
 }

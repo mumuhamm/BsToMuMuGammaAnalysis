@@ -143,8 +143,13 @@ private:
   const double nominalPhiMass;
   const double nominalElectronMass;
   const double nominalMuonMass;
+  const double nominalPiZeroMass;
+  const double nominalEtaMesonMass;
+  const double nominalEtaPrimeMass;
 
-
+  double PionZeroMassWindowNoFit_;
+  double EtaMesonMassWindowNoFit_;
+  double EtaPrimeMassWindowNoFit_;
   double JpsiMassWindowBeforeFit_;
   double JpsiMassWindowAfterFit_;
   double JpsiPtCut_;
@@ -160,7 +165,9 @@ private:
   double BpPDGMass_;
   double JpsiPDGMass_;
   double PsiPDGMass_;
-
+  double PionZeroPDGMass_;
+  double EtaMesonPDGMass_;
+  double EtaPrimePDGMass_;
 
   unsigned int tagmucounter_;
   unsigned int event_counter_;
@@ -181,5 +188,6 @@ private:
   double MinPtVertex = 0.0;
   int    NSelectedVertices;
   double PtSumVertex = 0.0;
+  std::set<size_t> excludedPhotons;
 };
 #endif
