@@ -379,6 +379,29 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         bmmgRootTree_->BSdxdz_     = BSdxdz;
         bmmgRootTree_->BSdydz_     = BSdydz;
 
+	edm::Handle<edm::TriggerResults> hltresults;
+	iEvent.getByToken(triggerresultsTok, hltresults);
+	//std::cout<<"hlt size:  "<<hltresults->size()<<"\n";
+
+	const  edm::TriggerNames & triggerNames_ = iEvent.triggerNames(*hltresults);
+	int ntrigs = hltresults->size();
+	for (int itrig = 0; itrig != ntrigs; ++itrig){
+		TString trigName = triggerNames_.triggerName(itrig);
+		//std::cout<<"triggernames:"<<itrig<<"::"<<trigName<<"\n";
+		if (trigName=="triggerbit_HLTDimuon4JpsiDisplaced_")      bmmgRootTree_->triggerbit_HLTDimuon4JpsiDisplaced_             = hltresults->accept(itrig);
+                if (trigName=="triggerbit_HLTDimuon4JpsiNoVertexing_")    bmmgRootTree_->triggerbit_HLTDimuon4JpsiNoVertexing_           = hltresults->accept(itrig);
+                if (trigName=="triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_")bmmgRootTree_->triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_       = hltresults->accept(itrig);
+		if (trigName=="triggerbit_HLT_DoubleMu4_LowMass_Displaced_") bmmgRootTree_->triggerbit_HLT_DoubleMu4_LowMass_Displaced_  = hltresults->accept(itrig);
+		if (trigName=="triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_") bmmgRootTree_->triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_  = hltresults->accept(itrig);
+		if (trigName=="triggerbit_HLT_DoubleMu4_3_Photon4_BsToMMG_") bmmgRootTree_->triggerbit_HLT_DoubleMu4_3_Photon4_BsToMMG_  = hltresults->accept(itrig);
+		if (trigName=="triggerbit_HLT_DoubleMu4_3_Displaced_Photon4_BsToMMG_") bmmgRootTree_->triggerbit_HLT_DoubleMu4_3_Displaced_Photon4_BsToMMG_ = hltresults->accept(itrig);
+                string str = (string) trigName  ;
+	}
+
+
+	edm::Handle<View<pat::PackedCandidate>> allTracks;
+	iEvent.getByToken(trackLabelK, allTracks);
+	
 	edm::Handle<edm::View<pat::Photon>> photon;
         iEvent.getByToken(PhotonTagTok, photon);
         bmmgRootTree_->photonMultiplicity_ = photon->size();
@@ -434,6 +457,58 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 			if (photonExcluded) break; // Exit inner loop if current photon is excluded
 		}
 		        if (photonExcluded) continue;
+
+
+			//BsToPhi(KK)Gamma 
+		        for (size_t k=0; k< allTracks->size(); ++k){
+				const pat::PackedCandidate & track1 = (*allTracks)[k];
+				if (track1.charge()<0)continue;
+				if (track1.pt() < KaonTrackPtCut_) continue;
+				if (track1.numberOfHits() < 5)continue;
+				if(!track1.trackHighPurity()) continue;
+				const reco::Track &  rtrk1 = (*allTracks)[k].pseudoTrack();
+				if (rtrk1.charge()<0) continue;
+				TransientTrack KPTT = trackBuilder.build(&rtrk1);
+				TrajectoryStateClosestToPoint KPTS = KPTT.impactPointTSCP();
+				if(!KPTS.isValid())continue;
+				if (!track1.clone()->hasTrackDetails())continue;
+				pat::PackedCandidate *track11 = track1.clone();
+				for (size_t l=k+1; l< allTracks->size(); ++l){
+					const pat::PackedCandidate & track2 = (*allTracks)[l];
+					if ( !track2.hasTrackDetails() )continue;
+					if (track2.charge()>0) continue;
+					if (track2.pt() < PionTrackPtCut_) continue;
+					if ( track2.numberOfHits()<5) continue;
+					if(!track2.trackHighPurity()) continue;
+					const reco::Track &  rtrk2 = (*allTracks)[l].pseudoTrack();
+					if (rtrk2.charge()>0) continue;
+					TransientTrack MMTT = trackBuilder.build(&rtrk2);
+					TrajectoryStateClosestToPoint KMTS = KMTT.impactPointTSCP();
+					if(!KMTS.isValid())continue;
+					if (KPTS.isValid() && KMTS.isValid()) {
+						ClosestApproachInRPhi cAppK;
+						cAppK.calculate(KPTS.theState(), KMTS.theState());
+						KKDCA = cAppK.distance();
+					}
+					if(KKDCA > 0.5)continue;
+					if (!track2.clone()->hasTrackDetails())continue;
+					pat::PackedCandidate *track22 = track2.clone();
+					pat::CompositeCandidate phigammaCand;
+					track11->setMass(kaonmass);
+					phigammaCand.addDaughter(*track11);
+					track22->setMass(kaonmass);
+					phigammaCand.addDaughter(*track22);
+					phigammaCand.addDaughter(ipatPhoton);
+					AddFourMomenta p4phigamma;
+					p4phigamma..set(phigammaCand);
+					std::cout<< " the phi candiadate mass " << phigammaCand.mass()<< "\n";
+				}
+			}
+
+
+
+			//BsToPhi(mumu)Gamma 
+			//BsToJpsiEta
 	                const reco::Photon::ShowerShape& iShowerShape = ipatPhoton.full5x5_showerShapeVariables();
                         bmmgRootTree_->photonSSSigmaiEtaiEta_ = iShowerShape.sigmaIetaIeta;
 			bmmgRootTree_->photonSSSigmaiEtaiPhi_ = iShowerShape.sigmaIetaIphi;

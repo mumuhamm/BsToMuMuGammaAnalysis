@@ -54,6 +54,13 @@ class RadiativeRootTree {
 		 double dedxTrk_;
 		 double errdedxTrk_;
 		 int    numdedxTrk_;
+		 int    triggerbit_HLT_DoubleMu4_LowMass_Displaced_;
+		 int    triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_;
+		 int    triggerbit_HLT_DoubleMu4_3_Photon4_BsToMMG_;
+		 int    triggerbit_HLT_DoubleMu4_3_Displaced_Photon4_BsToMMG_;
+		 int    triggerbit_HLTDimuon4JpsiDisplaced_;
+		 int    triggerbit_HLTDimuon4JpsiNoVertexing_;
+		 int    triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_;
 		 int    photonMultiplicity_;
                  double photonPt_;
                  double photonEta_;
