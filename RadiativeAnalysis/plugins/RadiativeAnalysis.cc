@@ -4,7 +4,7 @@
 // Original Author:  Alibordi Muhammad
 //         Created:  Fri, 12 Jul 2024 10:27:36 GMT
 //============================================================
-#include "BsToMuMuGammaAnalysis/RadiativeAnalysis/interface/KinematicBMMFit.h"
+#include "BsToMuMuGammaAnalysis/RadiativeAnalysis/interface/KinematicConstrainedFit.h"
 #include "BsToMuMuGammaAnalysis/RadiativeAnalysis/interface/RadiativeRootTree.h"
 #include "BsToMuMuGammaAnalysis/RadiativeAnalysis/interface/RadiativeAnalysis.h"
 
@@ -188,8 +188,11 @@ RadiativeAnalysis::RadiativeAnalysis(const edm::ParameterSet& iConfig):
         JpsiMassWindowBeforeFit_          = iConfig.getParameter<double>("JpsiMassWindowBeforeFit");
         JpsiMassWindowAfterFit_           = iConfig.getParameter<double>("JpsiMassWindowAfterFit");
         JpsiPtCut_                        = iConfig.getParameter<double>("JpsiPtCut");
+	KaonTrackPtCut_                   = iConfig.getParameter<double>("KaonTrackPtCut");//https://arxiv.org/pdf/1307.2782.pdf
 	PsiMassWindowBeforeFit_           = iConfig.getParameter<double>("PsiMassWindowBeforeFit");
         PsiMassWindowAfterFit_            = iConfig.getParameter<double>("PsiMassWindowAfterFit");
+	PhiMassWindowBeforeFit_           = iConfig.getParameter<double>("PhiMassWindowBeforeFit");
+        PhiMassWindowAfterFit_            = iConfig.getParameter<double>("PhiMassWindowAfterFit");
 	EtaMesonMassWindowNoFit_          = iConfig.getParameter<double>("EtaMesonMassWindowNoFit");
 	EtaPrimeMassWindowNoFit_          = iConfig.getParameter<double>("EtaPrimeMassWindowNoFit");
 	BsLowerMassCutBeforeFit_          = iConfig.getParameter<double>("BsLowerMassCutBeforeFit");
@@ -399,8 +402,14 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	}
 
 
-	edm::Handle<View<pat::PackedCandidate>> allTracks;
-	iEvent.getByToken(trackLabelK, allTracks);
+
+
+	//edm::ESHandle<TransientTrackBuilder> theB;
+	//iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
+	const auto& trackBuilder = iSetup.getData(trackBuilderTok);
+
+	edm::Handle<View<pat::PackedCandidate>> pfCands;
+	iEvent.getByToken(pfCandTagTok, pfCands);
 	
 	edm::Handle<edm::View<pat::Photon>> photon;
         iEvent.getByToken(PhotonTagTok, photon);
@@ -460,29 +469,29 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
 
 			//BsToPhi(KK)Gamma 
-		        for (size_t k=0; k< allTracks->size(); ++k){
-				const pat::PackedCandidate & track1 = (*allTracks)[k];
+		        for (size_t k=0; k< pfCands->size(); ++k){
+				const pat::PackedCandidate & track1 = (*pfCands)[k];
 				if (track1.charge()<0)continue;
 				if (track1.pt() < KaonTrackPtCut_) continue;
 				if (track1.numberOfHits() < 5)continue;
 				if(!track1.trackHighPurity()) continue;
-				const reco::Track &  rtrk1 = (*allTracks)[k].pseudoTrack();
-				if (rtrk1.charge()<0) continue;
-				TransientTrack KPTT = trackBuilder.build(&rtrk1);
+				const reco::Track &  pseudotrkkp = (*pfCands)[k].pseudoTrack();
+				if (pseudotrkkp.charge()<0) continue;
+				TransientTrack KPTT = trackBuilder.build(&pseudotrkkp);
 				TrajectoryStateClosestToPoint KPTS = KPTT.impactPointTSCP();
 				if(!KPTS.isValid())continue;
 				if (!track1.clone()->hasTrackDetails())continue;
-				pat::PackedCandidate *track11 = track1.clone();
-				for (size_t l=k+1; l< allTracks->size(); ++l){
-					const pat::PackedCandidate & track2 = (*allTracks)[l];
+				pat::PackedCandidate *trackkp = track1.clone();
+				for (size_t l=k+1; l< pfCands->size(); ++l){
+					const pat::PackedCandidate & track2 = (*pfCands)[l];
 					if ( !track2.hasTrackDetails() )continue;
 					if (track2.charge()>0) continue;
-					if (track2.pt() < PionTrackPtCut_) continue;
+					if (track2.pt() < KaonTrackPtCut_) continue;
 					if ( track2.numberOfHits()<5) continue;
 					if(!track2.trackHighPurity()) continue;
-					const reco::Track &  rtrk2 = (*allTracks)[l].pseudoTrack();
-					if (rtrk2.charge()>0) continue;
-					TransientTrack MMTT = trackBuilder.build(&rtrk2);
+					const reco::Track &  pseudotrkkm = (*pfCands)[l].pseudoTrack();
+					if (pseudotrkkm.charge()>0) continue;
+					TransientTrack KMTT = trackBuilder.build(&pseudotrkkm);
 					TrajectoryStateClosestToPoint KMTS = KMTT.impactPointTSCP();
 					if(!KMTS.isValid())continue;
 					if (KPTS.isValid() && KMTS.isValid()) {
@@ -492,16 +501,41 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					}
 					if(KKDCA > 0.5)continue;
 					if (!track2.clone()->hasTrackDetails())continue;
-					pat::PackedCandidate *track22 = track2.clone();
+					pat::PackedCandidate *trackkm = track2.clone();
+					pat::CompositeCandidate phiCand;
+					trackkp->setMass(kaonmass);
+                                        phiCand.addDaughter(*trackkp);
+                                        trackkm->setMass(kaonmass);
+                                        phiCand.addDaughter(*trackkm);
+					AddFourMomenta p4phi;
+					p4phi.set(phiCand);
+					if (abs(phiCand.mass()- nominalPhiMass) > PhiMassWindowBeforeFit_) continue;
+					bmmgRootTree_->PhiM_beffit_ = phiCand.mass();
+
 					pat::CompositeCandidate phigammaCand;
-					track11->setMass(kaonmass);
-					phigammaCand.addDaughter(*track11);
-					track22->setMass(kaonmass);
-					phigammaCand.addDaughter(*track22);
+					trackkp->setMass(kaonmass);
+					phigammaCand.addDaughter(*trackkp);
+					trackkm->setMass(kaonmass);
+					phigammaCand.addDaughter(*trackkm);
 					phigammaCand.addDaughter(ipatPhoton);
 					AddFourMomenta p4phigamma;
-					p4phigamma..set(phigammaCand);
-					std::cout<< " the phi candiadate mass " << phigammaCand.mass()<< "\n";
+					p4phigamma.set(phigammaCand);
+					if (phigammaCand.mass() < BsLowerMassCutBeforeFit_ || phigammaCand.mass() > BsUpperMassCutBeforeFit_) continue;
+
+					vector<TransientTrack> phi_transienttrk;
+					phi_transienttrk.push_back(trackBuilder.build(&pseudotrkkp));//psedotrkkm
+					phi_transienttrk.push_back(trackBuilder.build(&pseudotrkkm));
+					KalmanVertexFitter kvfphi;
+					TransientVertex tvphi = kvfphi.vertex(phi_transienttrk);
+					if (!tvphi.isValid()) continue;
+					Vertex vertex_phi = tvphi;
+					double vtxProb_Phi = TMath::Prob(vertex_phi.chi2(),(int)vertex_phi.ndof());
+					if (vtxProb_Phi < 1e-3) continue;
+					GlobalError vertexPositionError  = tvphi.positionError();
+					std::cout<< " the global position error : "<< vertexPositionError << "\n";
+					std::cout<< " fitted vertex probility of phi : " << vtxProb_Phi << "\n";
+					bmmgRootTree_->BsPhiGammaM_beffit_ = phigammaCand.mass() ;
+					//std::cout<< " the phi candiadate mass " << phigammaCand.mass()<< "\n";
 				}
 			}
 

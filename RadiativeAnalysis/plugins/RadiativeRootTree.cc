@@ -103,6 +103,8 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("EtaPrimeEta_alone", &EtaPrimeEta_alone_, "EtaPrimeEta_alone/D");
   bmmgTree_->Branch("EtaPrimePhi_alone", &EtaPrimePhi_alone_, "EtaPrimePhi_alone/D");
   bmmgTree_->Branch("EtaPrimePt_alone", &EtaPrimePt_alone_, "EtaPrimePt_alone/D");
+  bmmgTree_->Branch("PhiM_beffit", &PhiM_beffit_, "PhiM_beffit/D");
+  bmmgTree_->Branch("BsPhiGammaM_beffit", &BsPhiGammaM_beffit_, "BsPhiGammaM_beffit/D");
   bmmgTree_->Branch("electronMultiplicity",&electronMultiplicity_,"electronMultiplicity/D");
   bmmgTree_->Branch("pfCandMultiplicity",&pfCandMultiplicity_,"pfCandMultiplicity/D");
   bmmgTree_->Branch("costheta",&costheta_,"costheta/D");
@@ -213,6 +215,8 @@ void RadiativeRootTree::resetEntries()
 	EtaPrimeEta_alone_      = -9999999;
 	EtaPrimePhi_alone_      = -9999999;
 	EtaPrimePt_alone_       = -9999999;
+	PhiM_beffit_            = -9999999;
+	BsPhiGammaM_beffit_     = -9999999;
 	electronMultiplicity_   = -9999999;
 	pfCandMultiplicity_     = -9999999;
 	for(size_t i=0; i<9;++i){PVcovariance_[i] = -9999999;}
@@ -356,6 +360,8 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress("EtaPrimeEta_alone", &EtaPrimeEta_alone_);
   bmmgTree_->SetBranchAddress("EtaPrimePhi_alone", &EtaPrimePhi_alone_);
   bmmgTree_->SetBranchAddress("EtaPrimePt_alone",  &EtaPrimePt_alone_);
+  bmmgTree_->SetBranchAddress("PhiM_beffit", &PhiM_beffit_);
+  bmmgTree_->SetBranchAddress("BsPhiGammaM_beffit", &BsPhiGammaM_beffit_);
   bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);
   bmmgTree_->SetBranchAddress("pfCandMultiplicity", &pfCandMultiplicity_);
 }

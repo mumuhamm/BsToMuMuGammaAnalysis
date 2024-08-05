@@ -152,7 +152,10 @@ private:
   double EtaPrimeMassWindowNoFit_;
   double JpsiMassWindowBeforeFit_;
   double JpsiMassWindowAfterFit_;
+  double PhiMassWindowAfterFit_;
+  double PhiMassWindowBeforeFit_;
   double JpsiPtCut_;
+  double KaonTrackPtCut_;
   double PsiMassWindowAfterFit_;
   double PsiMassWindowBeforeFit_;
   double BsLowerMassCutBeforeFit_;
@@ -184,7 +187,8 @@ private:
   double DeltaRPhotonPsi       = -9999999;
   double JpsiPhotonDCA         = -9999999;
   double PsiPhotonDCA          = -9999999;
-  double minVtxP               = -9999999; 
+  double minVtxP               = -9999999;
+  double KKDCA                = -9999999; 
   double MinPtVertex = 0.0;
   int    NSelectedVertices;
   double PtSumVertex = 0.0;

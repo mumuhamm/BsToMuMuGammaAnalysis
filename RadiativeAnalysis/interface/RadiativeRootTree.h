@@ -110,7 +110,12 @@ class RadiativeRootTree {
 		 double EtaPrimeEta_alone_;
 		 double EtaPrimePhi_alone_;
 		 double EtaPrimePt_alone_;
-		 
+		 double PhiM_beffit_;
+		 double BsPhiGammaM_beffit_;
+
+
+
+
 		 int    electronMultiplicity_;
 		 int    pfCandMultiplicity_;
 

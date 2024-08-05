@@ -1,5 +1,5 @@
-#ifndef BsToMuMuGammaAnalysis_RadiativeAnalysis_KinematicBMMFit_h
-#define BsToMuMuGammaAnalysis_RadiativeAnalysis_KinematicBMMFit_h
+#ifndef BsToMuMuGammaAnalysis_RadiativeAnalysis_KinematicConstrainedFit_h
+#define BsToMuMuGammaAnalysis_RadiativeAnalysis_KinematicConstrainedFit_h
 
 
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -25,11 +25,13 @@
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicTree.h"
 
-class KinematicBMMFit{
+class KinematicConstrainedFit{
 	public: 
-		KinematicBMMFit();
-		~KinematicBMMFit(){}
+		KinematicConstrainedFit();
+		~KinematicConstrainedFit(){}
 		bool doFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass, const  double mass1, const double  mass2);
+		bool dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const  double mass1, const double  mass2);
+		bool dobsphimmgFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass);
 		double getProb() { return vtxprob_Bs; }
 		RefCountedKinematicParticle getParticle() {return bsmmg; }
                 RefCountedKinematicVertex  getVertex()   { return bsVertex; }
@@ -42,5 +44,6 @@ class KinematicBMMFit{
 		RefCountedKinematicVertex bsVertex;
 		RefCountedKinematicTree myTree_Bs;
 		RefCountedKinematicTree myTree_BsMM;
+
 };
 #endif
