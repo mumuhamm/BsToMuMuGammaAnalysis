@@ -110,6 +110,17 @@ class RadiativeRootTree {
 		 double EtaPrimeEta_alone_;
 		 double EtaPrimePhi_alone_;
 		 double EtaPrimePt_alone_;
+
+
+		 double K1Pt_beffit_;
+                 double K1Pz_beffit_;
+                 double K1Eta_beffit_;
+                 double K1Phi_beffit_;
+                 double K2Pt_beffit_;
+                 double K2Pz_beffit_;
+                 double K2Eta_beffit_;
+                 double K2Phi_beffit_;
+
 		 double PhiM_beffit_;
 		 double BsPhiGammaM_beffit_;
 

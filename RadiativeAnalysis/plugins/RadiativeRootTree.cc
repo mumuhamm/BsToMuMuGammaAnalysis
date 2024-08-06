@@ -103,6 +103,15 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("EtaPrimeEta_alone", &EtaPrimeEta_alone_, "EtaPrimeEta_alone/D");
   bmmgTree_->Branch("EtaPrimePhi_alone", &EtaPrimePhi_alone_, "EtaPrimePhi_alone/D");
   bmmgTree_->Branch("EtaPrimePt_alone", &EtaPrimePt_alone_, "EtaPrimePt_alone/D");
+  bmmgTree_->Branch("K1Pt_beffit", &K1Pt_beffit_,"K1Pt_beffit/D");
+  bmmgTree_->Branch("K1Pz_beffit", &K1Pz_beffit_,"K1Pz_beffit/D");
+  bmmgTree_->Branch("K1Eta_beffit", &K1Eta_beffit_,"K1Eta_beffit/D");
+  bmmgTree_->Branch("K1Phi_beffit", &K1Phi_beffit_,"K1Phi_beffit/D");
+  bmmgTree_->Branch("K2Pt_beffit", &K2Pt_beffit_,"K2Pt_beffit/D");
+  bmmgTree_->Branch("K2Pz_beffit", &K2Pz_beffit_,"K2Pz_beffit/D");
+  bmmgTree_->Branch("K2Eta_beffit", &K2Eta_beffit_,"K2Eta_beffit/D");
+  bmmgTree_->Branch("K2Phi_beffit", &K2Phi_beffit_,"K2Phi_beffit/D");
+
   bmmgTree_->Branch("PhiM_beffit", &PhiM_beffit_, "PhiM_beffit/D");
   bmmgTree_->Branch("BsPhiGammaM_beffit", &BsPhiGammaM_beffit_, "BsPhiGammaM_beffit/D");
   bmmgTree_->Branch("electronMultiplicity",&electronMultiplicity_,"electronMultiplicity/D");
@@ -215,6 +224,18 @@ void RadiativeRootTree::resetEntries()
 	EtaPrimeEta_alone_      = -9999999;
 	EtaPrimePhi_alone_      = -9999999;
 	EtaPrimePt_alone_       = -9999999;
+
+
+K1Pt_beffit_ = -9999999;
+  K1Pz_beffit_ = -9999999;
+  K1Eta_beffit_ = -9999999;
+  K1Phi_beffit_ = -9999999;
+  K2Pt_beffit_ = -9999999;
+  K2Pz_beffit_ = -9999999;
+  K2Eta_beffit_ = -9999999;
+  K2Phi_beffit_ = -9999999;
+
+
 	PhiM_beffit_            = -9999999;
 	BsPhiGammaM_beffit_     = -9999999;
 	electronMultiplicity_   = -9999999;
@@ -360,6 +381,16 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress("EtaPrimeEta_alone", &EtaPrimeEta_alone_);
   bmmgTree_->SetBranchAddress("EtaPrimePhi_alone", &EtaPrimePhi_alone_);
   bmmgTree_->SetBranchAddress("EtaPrimePt_alone",  &EtaPrimePt_alone_);
+
+  bmmgTree_->SetBranchAddress(  "K1Pt_beffit"			  , &K1Pt_beffit_  );
+  bmmgTree_->SetBranchAddress(  "K1Pz_beffit"			  , &K1Pz_beffit_  );
+  bmmgTree_->SetBranchAddress(  "K1Eta_beffit"			  , &K1Eta_beffit_  );
+  bmmgTree_->SetBranchAddress(  "K1Phi_beffit"			  , &K1Phi_beffit_  );
+  bmmgTree_->SetBranchAddress(  "K2Pt_beffit"			  , &K2Pt_beffit_  );
+  bmmgTree_->SetBranchAddress(  "K2Pz_beffit"			  , &K2Pz_beffit_  );
+  bmmgTree_->SetBranchAddress(  "K2Eta_beffit"			  , &K2Eta_beffit_  );
+  bmmgTree_->SetBranchAddress(  "K2Phi_beffit"			  , &K2Phi_beffit_  );
+
   bmmgTree_->SetBranchAddress("PhiM_beffit", &PhiM_beffit_);
   bmmgTree_->SetBranchAddress("BsPhiGammaM_beffit", &BsPhiGammaM_beffit_);
   bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);

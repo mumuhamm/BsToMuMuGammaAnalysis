@@ -41,9 +41,11 @@ class KinematicConstrainedFit{
 	private: 
 		double vtxprob_Bs;
 		RefCountedKinematicParticle bsmmg;
+		RefCountedKinematicParticle bs;
 		RefCountedKinematicVertex bsVertex;
 		RefCountedKinematicTree myTree_Bs;
 		RefCountedKinematicTree myTree_BsMM;
+		RefCountedKinematicTree renewed_BsConstrainedTree;
 
 };
 #endif

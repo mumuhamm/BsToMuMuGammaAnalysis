@@ -149,7 +149,8 @@ RadiativeAnalysis::RadiativeAnalysis(const edm::ParameterSet& iConfig):
 	nominalMuonMass(0.1056583),
 	nominalPiZeroMass(0.1349768),
 	nominalEtaMesonMass(0.547862),
-	nominalEtaPrimeMass(0.957780)
+	nominalEtaPrimeMass(0.957780),
+	nominalKaonMass(0.493677)
 {
 	isMCstudy_ = iConfig.getParameter<bool>("isMCstudy");
 	genParticlesLabel                 = iConfig.getParameter<InputTag>("genParticlesLabel");
@@ -528,11 +529,29 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					KalmanVertexFitter kvfphi;
 					TransientVertex tvphi = kvfphi.vertex(phi_transienttrk);
 					if (!tvphi.isValid()) continue;
-					Vertex vertex_phi = tvphi;
-					double vtxProb_Phi = TMath::Prob(vertex_phi.chi2(),(int)vertex_phi.ndof());
-					if (vtxProb_Phi < 1e-3) continue;
-					GlobalError vertexPositionError  = tvphi.positionError();
-					std::cout<< " the global position error : "<< vertexPositionError << "\n";
+					Vertex kalmanvertex_phi = tvphi;// This would bethe bs vertex since there will be no transient tracks for photons
+					double vtxProb_Phi = TMath::Prob(kalmanvertex_phi.chi2(),(int)kalmanvertex_phi.ndof());
+					if (vtxProb_Phi < 1e-4) continue;
+
+					bmmgRootTree_->K1Pt_beffit_   = track1.pt();
+					bmmgRootTree_->K1Pz_beffit_   = track1.pz();
+					bmmgRootTree_->K1Eta_beffit_  = track1.eta();
+					bmmgRootTree_->K1Phi_beffit_  = track1.phi();
+					bmmgRootTree_->K2Pt_beffit_   = track2.pt();
+					bmmgRootTree_->K2Pz_beffit_   = track2.pz();
+					bmmgRootTree_->K2Eta_beffit_  = track2.eta();
+					bmmgRootTree_->K2Phi_beffit_  = track2.phi();
+					KinematicConstrainedFit Kfitter;
+					bool fitSuccess = Kfitter.dobsphikkgFit(phi_transienttrk, nominalKaonMass, nominalKaonMass);
+					std::cout << " the fitted fitsuccess bool parameter : "<< fitSuccess << "\n";
+					if(fitSuccess != 1) continue;
+					//RefCountedKinematicParticle bs = Kfitter.getParticle();
+					//RefCountedKinematicVertex bVertex = Kfitter.getVertex();
+					//AlgebraicVector7 b_par = bs->currentState().kinematicParameters().vector();
+					//AlgebraicSymMatrix77 bs_er = bs->currentState().kinematicParametersError().matrix();
+
+					//GlobalError vertexPositionError  = tvphi.positionError();
+					//std::cout<< " the global position error : "<< vertexPositionError << "\n";
 					std::cout<< " fitted vertex probility of phi : " << vtxProb_Phi << "\n";
 					bmmgRootTree_->BsPhiGammaM_beffit_ = phigammaCand.mass() ;
 					//std::cout<< " the phi candiadate mass " << phigammaCand.mass()<< "\n";

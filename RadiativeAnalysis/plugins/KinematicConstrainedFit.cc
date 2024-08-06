@@ -52,7 +52,7 @@ bool KinematicConstrainedFit::doFit(std::vector<reco::TransientTrack> t_tracks, 
 	delete bsmm_const;
         return 1;
 }
-bool KinematicConstrainedFit::dobsphikkFit(std::vector<reco::TransientTrack> t_tracks, const double mass1, const double  mass2){
+bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const double mass1, const double  mass2){
 	reco::TransientTrack track_KP = t_tracks[0];
 	reco::TransientTrack track_KM = t_tracks[1];
 	KinematicParticleFactoryFromTransientTrack pFactory;
@@ -77,8 +77,8 @@ bool KinematicConstrainedFit::dobsphikkFit(std::vector<reco::TransientTrack> t_t
 	}
 	renewed_BsConstrainedTree->movePointerToTheTop();
 	bs = renewed_BsConstrainedTree->currentParticle();
-	bVertex = renewed_BsConstrainedTree->currentDecayVertex();
-	if (!bVertex->vertexIsValid()) {
+	bsVertex = renewed_BsConstrainedTree->currentDecayVertex();
+	if (!bsVertex->vertexIsValid()) {
 		delete phi_const;
 		return 0;
 	}
@@ -87,4 +87,37 @@ bool KinematicConstrainedFit::dobsphikkFit(std::vector<reco::TransientTrack> t_t
 	return 1;
 }
 
-
+bool KinematicConstrainedFit::dobsphimmgFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass){
+	reco::TransientTrack track_MuP = t_tracks[0];
+	reco::TransientTrack track_MuM = t_tracks[1];
+	KinematicParticleFactoryFromTransientTrack pFactory;
+	float muon_sigma =  0.0000000001;
+	float chi =0.;
+	float ndf =0.;
+	std::vector<RefCountedKinematicParticle> allParticlesMu;
+	allParticlesMu.push_back(pFactory.particle (track_MuP, muonMass, chi, ndf, muon_sigma));
+	allParticlesMu.push_back(pFactory.particle (track_MuM, muonMass, chi, ndf, muon_sigma));
+	KinematicParticleVertexFitter Fitter;
+	RefCountedKinematicTree PhiTree = Fitter.fit(allParticlesMu);
+	if(PhiTree->isEmpty()) return 0;
+	KinematicParticleFitter constFitter;
+	double nominalPhiMass =  1.019455;
+	float phiMsigma = 0.00002;
+	KinematicConstraint * phi_const = new MassKinematicConstraint( nominalPhiMass, phiMsigma);
+	PhiTree = constFitter.fit(phi_const,PhiTree);
+	renewed_BsConstrainedTree = PhiTree;
+	if(renewed_BsConstrainedTree->isEmpty()) {
+		delete phi_const;
+		return 0;
+	}
+	renewed_BsConstrainedTree->movePointerToTheTop();
+	bs = renewed_BsConstrainedTree->currentParticle();
+	bsVertex = renewed_BsConstrainedTree->currentDecayVertex();
+	if (!bsVertex->vertexIsValid()) {
+		delete phi_const;
+		return 0;
+	}
+	vtxprob_Bs = TMath::Prob(bs->chiSquared(), (int)bs->degreesOfFreedom());
+	delete phi_const;
+	return 1;
+}

@@ -146,7 +146,7 @@ private:
   const double nominalPiZeroMass;
   const double nominalEtaMesonMass;
   const double nominalEtaPrimeMass;
-
+  const double nominalKaonMass;
   double PionZeroMassWindowNoFit_;
   double EtaMesonMassWindowNoFit_;
   double EtaPrimeMassWindowNoFit_;
