@@ -1,5 +1,11 @@
 #include "BsToMuMuGammaAnalysis/RadiativeAnalysis/interface/KinematicConstrainedFit.h"
-
+#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
+#include "DataFormats/PatCandidates/interface/Photon.h"
+#include "DataFormats/EgammaCandidates/interface/Photon.h"
+using namespace reco;
+using namespace edm;
+using namespace std;
+using namespace pat;
 #include <TMath.h>
 KinematicConstrainedFit::KinematicConstrainedFit(){
 
@@ -52,7 +58,7 @@ bool KinematicConstrainedFit::doFit(std::vector<reco::TransientTrack> t_tracks, 
 	delete bsmm_const;
         return 1;
 }
-bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const double mass1, const double  mass2){
+bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const double mass1, const double  mass2, const pat::Photon &photon){
 	reco::TransientTrack track_KP = t_tracks[0];
 	reco::TransientTrack track_KM = t_tracks[1];
 	KinematicParticleFactoryFromTransientTrack pFactory;
@@ -76,15 +82,41 @@ bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_
 		return 0;
 	}
 	renewed_BsConstrainedTree->movePointerToTheTop();
-	bs = renewed_BsConstrainedTree->currentParticle();
-	bsVertex = renewed_BsConstrainedTree->currentDecayVertex();
-	if (!bsVertex->vertexIsValid()) {
-		delete phi_const;
-		return 0;
-	}
-	vtxprob_Bs = TMath::Prob(bs->chiSquared(), (int)bs->degreesOfFreedom());
-	delete phi_const;
-	return 1;
+	RefCountedKinematicParticle phi = renewed_BsConstrainedTree->currentParticle();
+
+	// Incorporate the photon's four-momentum
+    TLorentzVector photonP4;
+    photonP4.SetPtEtaPhiE(photon.pt(), photon.eta(), photon.phi(), photon.energy());
+    // Create a dummy particle for the photon (mass = 0)
+    KinematicParticleFactoryFromTransientTrack pFactoryPhotons;
+    RefCountedKinematicParticle photonParticle = pFactoryPhotons.particle(photonP4, 0.0, chi, ndf, 0.0);
+    
+    // Combine the phi meson and the photon to form the Bs candidate
+    std::vector<RefCountedKinematicParticle> allParticlesBs;
+    allParticlesBs.push_back(phi);
+    allParticlesBs.push_back(photonParticle);
+	RefCountedKinematicTree BsTree = Fitter.fit(allParticlesBs);
+    
+    if (BsTree->isEmpty()) {
+        delete phi_const;
+        return false;
+    }
+    
+    BsTree->movePointerToTheTop();
+	bs = BsTree->currentParticle();
+    bsVertex = BsTree->currentDecayVertex();
+    
+    if (!bsVertex->vertexIsValid()) {
+        delete phi_const;
+        return false;
+    }
+    
+    vtxprob_Bs = TMath::Prob(bs->chiSquared(), (int)bs->degreesOfFreedom());
+    
+    delete phi_const;
+    return true;
+	
+	
 }
 
 bool KinematicConstrainedFit::dobsphimmgFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass){

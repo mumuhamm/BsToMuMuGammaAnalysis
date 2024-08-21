@@ -14,23 +14,36 @@
 //#include "SimTracker/Records/interface/TrackAssociatorRecord.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/ParticleMass.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
-#include <RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h>
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h"
 #include "RecoVertex/KinematicFit/interface/KinematicConstrainedVertexFitter.h"
 #include "RecoVertex/KinematicFit/interface/TwoTrackMassKinematicConstraint.h"
 #include "RecoVertex/KinematicFit/interface/KinematicParticleVertexFitter.h"
 #include "RecoVertex/KinematicFit/interface/KinematicParticleFitter.h"
 #include "RecoVertex/KinematicFit/interface/MassKinematicConstraint.h"
-
+#include "RecoVertex/KinematicFitPrimitives/interface/ParticleKinematicLinearizedTrackStateFactory.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicVertex.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicParticle.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicTree.h"
+#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
+#include "DataFormats/PatCandidates/interface/Photon.h"
+#include "DataFormats/EgammaCandidates/interface/Photon.h"
+#include <memory>
+#include <cstddef>
+#include <cfloat>
+#include <string>
+#include "TLorentzVector.h"
+#include "TVector3.h"
+#include "TVector.h"
+#include "TLorentzRotation.h"
+#include <iostream>
+#include <TMath.h>
 
 class KinematicConstrainedFit{
 	public: 
 		KinematicConstrainedFit();
 		~KinematicConstrainedFit(){}
 		bool doFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass, const  double mass1, const double  mass2);
-		bool dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const  double mass1, const double  mass2);
+		bool dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const  double mass1, const double  mass2, const pat::Photon &photon);
 		bool dobsphimmgFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass);
 		double getProb() { return vtxprob_Bs; }
 		RefCountedKinematicParticle getParticle() {return bsmmg; }

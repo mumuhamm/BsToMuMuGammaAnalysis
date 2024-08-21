@@ -113,7 +113,18 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("K2Phi_beffit", &K2Phi_beffit_,"K2Phi_beffit/D");
 
   bmmgTree_->Branch("PhiM_beffit", &PhiM_beffit_, "PhiM_beffit/D");
+  bmmgTree_->Branch("PhiEta_beffit", &PhiEta_beffit_, "PhiEta_beffit/D");
+  bmmgTree_->Branch("PhiPhi_beffit", &PhiPhi_beffit_, "PhiPhi_beffit/D");
+  bmmgTree_->Branch("PhiPt_beffit", &PhiPt_beffit_, "PhiPt_beffit/D");
   bmmgTree_->Branch("BsPhiGammaM_beffit", &BsPhiGammaM_beffit_, "BsPhiGammaM_beffit/D");
+  bmmgTree_->Branch("BsPhiGammaEta_beffit", &BsPhiGammaEta_beffit_, "BsPhiGammaEta_beffit/D");
+  bmmgTree_->Branch("BsPhiGammaPhi_beffit", &BsPhiGammaPhi_beffit_, "BsPhiGammaPhi_beffit/D");
+  bmmgTree_->Branch("BsPhiGammaPt_beffit", &BsPhiGammaPt_beffit_, "BsPhiGammaPt_beffit/D");
+  bmmgTree_->Branch("BsPhiGamma_vtxProb", &BsPhiGamma_vtxProb_, "BsPhiGamma_vtxProb/D");
+  bmmgTree_->Branch("BsPhiGamma_CosineAlpha", &BsPhiGamma_CosineAlpha_, "BsPhiGamma_CosineAlpha/D");
+  bmmgTree_->Branch("BsPhiGamma_KKDCA", &BsPhiGamma_KKDCA_, "BsPhiGamma_KKDCA/D");
+ 
+
   bmmgTree_->Branch("electronMultiplicity",&electronMultiplicity_,"electronMultiplicity/D");
   bmmgTree_->Branch("pfCandMultiplicity",&pfCandMultiplicity_,"pfCandMultiplicity/D");
   bmmgTree_->Branch("costheta",&costheta_,"costheta/D");
@@ -135,9 +146,9 @@ void RadiativeRootTree::writeFile()
 void RadiativeRootTree::resetEntries()
 {
 	runNumber_          = -9999999;
-        eventNumber_        = -9999999;
-        lumiSection_        = -9999999;
-        PUinteraction_      = -9999999;
+  eventNumber_        = -9999999;
+  lumiSection_        = -9999999;
+  PUinteraction_      = -9999999;
 	PUTrueinteraction_  = -9999999;
 	NVerticesbeforecut_ = -9999999;
 	NVerticesaftercut_  = -9999999;
@@ -145,7 +156,7 @@ void RadiativeRootTree::resetEntries()
 	BSy_                = -9999999;
 	BSz_                = -9999999;
 	BSdx_               = -9999999;
-       	BSdy_               = -9999999;
+  BSdy_               = -9999999;
 	BSdz_               = -9999999;
 	BSdxdz_             = -9999999;
 	BSdydz_             = -9999999;
@@ -169,16 +180,16 @@ void RadiativeRootTree::resetEntries()
 	errdedxTrk_         = -9999999;
 	numdedxTrk_         = -9999999;
 	triggerbit_HLT_DoubleMu4_LowMass_Displaced_            = -9999999;
-        triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_            = -9999999;
+  triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_            = -9999999;
 	triggerbit_HLT_DoubleMu4_3_Photon4_BsToMMG_            = -9999999;
-        triggerbit_HLT_DoubleMu4_3_Displaced_Photon4_BsToMMG_  = -9999999;
+  triggerbit_HLT_DoubleMu4_3_Displaced_Photon4_BsToMMG_  = -9999999;
 	triggerbit_HLTDimuon4JpsiDisplaced_                    = -9999999;
 	triggerbit_HLTDimuon4JpsiNoVertexing_                  = -9999999;
 	triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_              = -9999999;
 	photonMultiplicity_ = -9999999;
 	photonPt_           = -9999999;
-        photonEta_          = -9999999;
-        photonPhi_          = -9999999;
+  photonEta_          = -9999999;
+  photonPhi_          = -9999999;
 	photonEnergy_       = -9999999;
 	photonET_           = -9999999;
 	photonTrkIso_       = -9999999;
@@ -220,13 +231,13 @@ void RadiativeRootTree::resetEntries()
 	EtaMesonEta_alone_      = -9999999;
 	EtaMesonPhi_alone_      = -9999999;
 	EtaMesonPt_alone_       = -9999999;
-       	EtaPrimeM_alone_        = -9999999;
+  EtaPrimeM_alone_        = -9999999;
 	EtaPrimeEta_alone_      = -9999999;
 	EtaPrimePhi_alone_      = -9999999;
 	EtaPrimePt_alone_       = -9999999;
 
 
-K1Pt_beffit_ = -9999999;
+  K1Pt_beffit_ = -9999999;
   K1Pz_beffit_ = -9999999;
   K1Eta_beffit_ = -9999999;
   K1Phi_beffit_ = -9999999;
@@ -237,7 +248,16 @@ K1Pt_beffit_ = -9999999;
 
 
 	PhiM_beffit_            = -9999999;
+  PhiEta_beffit_          = -9999999;
+  PhiPhi_beffit_          = -9999999;
+  PhiPt_beffit_           = -9999999;
 	BsPhiGammaM_beffit_     = -9999999;
+  BsPhiGammaEta_beffit_   = -9999999;
+  BsPhiGammaPhi_beffit_   = -9999999;
+  BsPhiGammaPt_beffit_    = -9999999;
+  BsPhiGamma_vtxProb_     = -9999999;
+  BsPhiGamma_CosineAlpha_ = -9999999;
+  BsPhiGamma_KKDCA_       = -9999999;
 	electronMultiplicity_   = -9999999;
 	pfCandMultiplicity_     = -9999999;
 	for(size_t i=0; i<9;++i){PVcovariance_[i] = -9999999;}
@@ -392,7 +412,17 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress(  "K2Phi_beffit"			  , &K2Phi_beffit_  );
 
   bmmgTree_->SetBranchAddress("PhiM_beffit", &PhiM_beffit_);
+  bmmgTree_->SetBranchAddress("PhiEta_beffit", &PhiEta_beffit_);
+  bmmgTree_->SetBranchAddress("PhiPhi_beffit", &PhiPhi_beffit_);
+  bmmgTree_->SetBranchAddress("PhiPt_beffit", &PhiPt_beffit_);
   bmmgTree_->SetBranchAddress("BsPhiGammaM_beffit", &BsPhiGammaM_beffit_);
+  bmmgTree_->SetBranchAddress("BsPhiGammaEta_beffit", &BsPhiGammaEta_beffit_);
+  bmmgTree_->SetBranchAddress("BsPhiGammaPhi_beffit", &BsPhiGammaPhi_beffit_);
+  bmmgTree_->SetBranchAddress("BsPhiGammaPt_beffit", &BsPhiGammaPt_beffit_);
+  bmmgTree_->SetBranchAddress("BsPhiGamma_vtxProb", &BsPhiGamma_vtxProb_);
+  bmmgTree_->SetBranchAddress("BsPhiGamma_CosineAlpha", &BsPhiGamma_CosineAlpha_);
+  bmmgTree_->SetBranchAddress("BsPhiGamma_KKDCA", &BsPhiGamma_KKDCA_);
+  
   bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);
   bmmgTree_->SetBranchAddress("pfCandMultiplicity", &pfCandMultiplicity_);
 }

@@ -113,16 +113,26 @@ class RadiativeRootTree {
 
 
 		 double K1Pt_beffit_;
-                 double K1Pz_beffit_;
-                 double K1Eta_beffit_;
-                 double K1Phi_beffit_;
-                 double K2Pt_beffit_;
-                 double K2Pz_beffit_;
-                 double K2Eta_beffit_;
-                 double K2Phi_beffit_;
+         double K1Pz_beffit_;
+         double K1Eta_beffit_;
+         double K1Phi_beffit_;
+         double K2Pt_beffit_;
+         double K2Pz_beffit_;
+         double K2Eta_beffit_;
+         double K2Phi_beffit_;
 
 		 double PhiM_beffit_;
+		 double PhiEta_beffit_;
+		 double PhiPhi_beffit_;
+		 double PhiPt_beffit_;
+
 		 double BsPhiGammaM_beffit_;
+		 double BsPhiGammaEta_beffit_;
+		 double BsPhiGammaPhi_beffit_;
+		 double BsPhiGammaPt_beffit_;
+		 double BsPhiGamma_vtxProb_;
+		 double BsPhiGamma_CosineAlpha_;
+		 double BsPhiGamma_KKDCA_;
 
 
 
