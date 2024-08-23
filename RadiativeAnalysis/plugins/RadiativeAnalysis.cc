@@ -559,8 +559,8 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					math::XYZVector      pperp(track1.px() + track2.px(), track1.py() + track2.py(), 0.);
 					reco::Vertex::Point  vpoint = kalmanvertex_phi.position();
 					double chi2_pv_kalmanvtx = (PVx - vpoint.x()) * (PVx - vpoint.x()) / (PVx * PVx) +
-                        (PVy - vpoint.y()) * (PVy - vpoint.y()) / (PVy * PVy) +
-                        (PVz - vpoint.z()) * (PVz - vpoint.z()) / (PVz * PVz);
+					(PVy - vpoint.y()) * (PVy - vpoint.y()) / (PVy * PVy) +
+					(PVz - vpoint.z()) * (PVz - vpoint.z()) / (PVz * PVz);
                     AlgebraicVector3 predefinedPV(PVx, PVy, PVz);
 					AlgebraicVector3 recoVtx( vpoint.x(), vpoint.y(), vpoint.z());
 					AlgebraicVector3 diff = predefinedPV - recoVtx;
@@ -570,14 +570,14 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					diffVector[2] = diff[2];
 					TMatrixD covarianceMatrix(3, 3);
    					covarianceMatrix(0,0) = gigi.cxx();
-                    covarianceMatrix(0,1) = 0.0;
+					covarianceMatrix(0,1) = 0.0;
 					covarianceMatrix(0,2) = 0.0;
 					covarianceMatrix(1,0) = gigi.cyx();
 					covarianceMatrix(1,1) = gigi.cyy();
-                    covarianceMatrix(1,2) = 0.0;
+					covarianceMatrix(1,2) = 0.0;
    					covarianceMatrix(2,0) = gigi.czx();
   					covarianceMatrix(2,1) = gigi.czy();
-  				    covarianceMatrix(2,2) = gigi.czz();
+					covarianceMatrix(2,2) = gigi.czz();
 					/*TMatrixD diffMatrix(3, 1);  // Column vector
 					diffMatrix(0, 0) = diff[0];
 					diffMatrix(1, 0) = diff[1];
