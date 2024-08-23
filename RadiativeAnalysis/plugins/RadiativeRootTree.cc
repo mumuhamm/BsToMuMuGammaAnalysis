@@ -123,6 +123,8 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("BsPhiGamma_vtxProb", &BsPhiGamma_vtxProb_, "BsPhiGamma_vtxProb/D");
   bmmgTree_->Branch("BsPhiGamma_CosineAlpha", &BsPhiGamma_CosineAlpha_, "BsPhiGamma_CosineAlpha/D");
   bmmgTree_->Branch("BsPhiGamma_KKDCA", &BsPhiGamma_KKDCA_, "BsPhiGamma_KKDCA/D");
+  bmmgTree_->Branch("BsPhiGamma_Chi2pv_KVFvtx", &BsPhiGamma_Chi2pv_KVFvtx_, "BsPhiGamma_Chi2pv_KVFvtx/D");
+  bmmgTree_->Branch("BsPhiGamma_Mahalanobis", &BsPhiGamma_Mahalanobis_, "BsPhiGamma_Mahalanobis/D");
  
 
   bmmgTree_->Branch("electronMultiplicity",&electronMultiplicity_,"electronMultiplicity/D");
@@ -258,6 +260,8 @@ void RadiativeRootTree::resetEntries()
   BsPhiGamma_vtxProb_     = -9999999;
   BsPhiGamma_CosineAlpha_ = -9999999;
   BsPhiGamma_KKDCA_       = -9999999;
+  BsPhiGamma_Chi2pv_KVFvtx_ = -9999999;
+  BsPhiGamma_Mahalanobis_ = -9999999;
 	electronMultiplicity_   = -9999999;
 	pfCandMultiplicity_     = -9999999;
 	for(size_t i=0; i<9;++i){PVcovariance_[i] = -9999999;}
@@ -422,6 +426,8 @@ void RadiativeRootTree::setBranchAddresses(){
   bmmgTree_->SetBranchAddress("BsPhiGamma_vtxProb", &BsPhiGamma_vtxProb_);
   bmmgTree_->SetBranchAddress("BsPhiGamma_CosineAlpha", &BsPhiGamma_CosineAlpha_);
   bmmgTree_->SetBranchAddress("BsPhiGamma_KKDCA", &BsPhiGamma_KKDCA_);
+  bmmgTree_->SetBranchAddress("BsPhiGamma_Chi2pv_KVFvtx", &BsPhiGamma_Chi2pv_KVFvtx_);
+  bmmgTree_->SetBranchAddress("BsPhiGamma_Mahalanobis", &BsPhiGamma_Mahalanobis_);
   
   bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);
   bmmgTree_->SetBranchAddress("pfCandMultiplicity", &pfCandMultiplicity_);

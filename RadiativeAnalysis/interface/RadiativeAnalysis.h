@@ -55,7 +55,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "BsToMuMuGammaAnalysis/RadiativeAnalysis/interface/RadiativeRootTree.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
-
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 class RadiativeAnalysis : public edm::one::EDAnalyzer<edm::one::SharedResources> {
 public:
@@ -65,7 +65,7 @@ public:
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
   void beginJob() override;
-  void analyze(const edm::Event&, const edm::EventSetup&) override;
+  void analyze(const edm::Event&, const edm::EventSetup&)override ;
   void endJob() override;
   void fillMCInfo( edm::Handle<edm::View<reco::GenParticle>>& genParticles);
   void setFitParGamma(RefCountedKinematicTree& myTree);

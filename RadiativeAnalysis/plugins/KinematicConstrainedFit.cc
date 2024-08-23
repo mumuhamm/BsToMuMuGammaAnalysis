@@ -2,16 +2,27 @@
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/EgammaCandidates/interface/Photon.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicState.h"
+#include "DataFormats/GeometryVector/interface/GlobalVector.h"
+#include "DataFormats/GeometryVector/interface/GlobalPoint.h"
+#include "TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h"
+#include "MagneticField/Engine/interface/MagneticField.h"
+#include "MuonAnalysis/MuonAssociators/interface/PropagateToMuon.h"
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/EventSetup.h"
+#include "FWCore/Framework/interface/ESHandle.h"
+#include "DataFormats/Common/interface/Handle.h"
 using namespace reco;
 using namespace edm;
 using namespace std;
 using namespace pat;
 #include <TMath.h>
-KinematicConstrainedFit::KinematicConstrainedFit(){
 
-}
 
+KinematicConstrainedFit::KinematicConstrainedFit(){}
 bool KinematicConstrainedFit::doFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass, const double mass1, const double  mass2){
+    
 	reco::TransientTrack track_MuP = t_tracks[0];
 	reco::TransientTrack track_MuM = t_tracks[1];
 	//Creating a KinematicParticleFactory
@@ -58,7 +69,7 @@ bool KinematicConstrainedFit::doFit(std::vector<reco::TransientTrack> t_tracks, 
 	delete bsmm_const;
         return 1;
 }
-bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const double mass1, const double  mass2, const pat::Photon &photon){
+bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const double mass1, const double  mass2){
 	reco::TransientTrack track_KP = t_tracks[0];
 	reco::TransientTrack track_KM = t_tracks[1];
 	KinematicParticleFactoryFromTransientTrack pFactory;
@@ -82,16 +93,25 @@ bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_
 		return 0;
 	}
 	renewed_BsConstrainedTree->movePointerToTheTop();
+	bs = renewed_BsConstrainedTree->currentParticle();
+	bsVertex = renewed_BsConstrainedTree->currentDecayVertex();
+	/*renewed_BsConstrainedTree->movePointerToTheTop();
 	RefCountedKinematicParticle phi = renewed_BsConstrainedTree->currentParticle();
+	float photon_mass = 0.0;
+    float photon_mass_sigma = 1e-6;
 
-	// Incorporate the photon's four-momentum
-    TLorentzVector photonP4;
-    photonP4.SetPtEtaPhiE(photon.pt(), photon.eta(), photon.phi(), photon.energy());
-    // Create a dummy particle for the photon (mass = 0)
-    KinematicParticleFactoryFromTransientTrack pFactoryPhotons;
-    RefCountedKinematicParticle photonParticle = pFactoryPhotons.particle(photonP4, 0.0, chi, ndf, 0.0);
+	GlobalVector photonMomentum(photon.px(), photon.py(), photon.pz());
+	GlobalPoint dummyPosition(0, 0, 0); // Photons don't have a well-defined vertex, so this is just a placeholder
+	AlgebraicSymMatrix33 errorMatrix = renewed_BsConstrainedTree->currentDecayVertex()->error().matrix();
+	GlobalError photonMomentumError(errorMatrix);
+	KinematicState photonState(
+        FreeTrajectoryState(GlobalTrajectoryParameters(dummyPosition, photonMomentum, 0, theMagneticField_)),
+		photon_mass, photon_mass_sigma
+    );
+	VirtualKinematicParticleFactory particleFactory;
+    RefCountedKinematicParticle photonParticle = particleFactory.particle(photonState, chi, ndf, nullptr);
     
-    // Combine the phi meson and the photon to form the Bs candidate
+	 // Combine the phi meson and the photon to form the Bs candidate
     std::vector<RefCountedKinematicParticle> allParticlesBs;
     allParticlesBs.push_back(phi);
     allParticlesBs.push_back(photonParticle);
@@ -105,7 +125,8 @@ bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_
     BsTree->movePointerToTheTop();
 	bs = BsTree->currentParticle();
     bsVertex = BsTree->currentDecayVertex();
-    
+    */
+
     if (!bsVertex->vertexIsValid()) {
         delete phi_const;
         return false;

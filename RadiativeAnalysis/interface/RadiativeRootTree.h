@@ -133,6 +133,8 @@ class RadiativeRootTree {
 		 double BsPhiGamma_vtxProb_;
 		 double BsPhiGamma_CosineAlpha_;
 		 double BsPhiGamma_KKDCA_;
+		 double BsPhiGamma_Chi2pv_KVFvtx_;
+		 double BsPhiGamma_Mahalanobis_;
 
 
 
@@ -149,10 +151,8 @@ class RadiativeRootTree {
 
 		 //arrays 
 		 double PVcovariance_[9];
-
-
-		TFile* bmmgFile_;
-                TTree* bmmgTree_;
+		 TFile* bmmgFile_;
+		 TTree* bmmgTree_;
 };
 #endif
 

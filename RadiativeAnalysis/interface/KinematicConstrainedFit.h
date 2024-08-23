@@ -27,6 +27,18 @@
 #include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/EgammaCandidates/interface/Photon.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicState.h"
+#include "DataFormats/GeometryVector/interface/GlobalVector.h"
+#include "DataFormats/GeometryVector/interface/GlobalPoint.h"
+#include "TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h"
+#include "MagneticField/Engine/interface/MagneticField.h"
+#include "MuonAnalysis/MuonAssociators/interface/PropagateToMuon.h"
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/EventSetup.h"
+#include "FWCore/Framework/interface/ESHandle.h"
+#include "DataFormats/Common/interface/Handle.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include <memory>
 #include <cstddef>
 #include <cfloat>
@@ -43,15 +55,16 @@ class KinematicConstrainedFit{
 		KinematicConstrainedFit();
 		~KinematicConstrainedFit(){}
 		bool doFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass, const  double mass1, const double  mass2);
-		bool dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const  double mass1, const double  mass2, const pat::Photon &photon);
+		bool dobsphikkgFit(std::vector<reco::TransientTrack> t_tracks, const  double mass1, const double  mass2);
 		bool dobsphimmgFit(std::vector<reco::TransientTrack> t_tracks, const double muonMass);
 		double getProb() { return vtxprob_Bs; }
 		RefCountedKinematicParticle getParticle() {return bsmmg; }
-                RefCountedKinematicVertex  getVertex()   { return bsVertex; }
-                RefCountedKinematicTree    getTree()     { return myTree_Bs; }
-                RefCountedKinematicTree    getBsMMTree()     { return myTree_BsMM; }
+        RefCountedKinematicVertex  getVertex()   { return bsVertex; }
+        RefCountedKinematicTree    getTree()     { return myTree_Bs; }
+        RefCountedKinematicTree    getBsMMTree()     { return myTree_BsMM; }
 
-	private: 
+	private:
+	
 		double vtxprob_Bs;
 		RefCountedKinematicParticle bsmmg;
 		RefCountedKinematicParticle bs;
@@ -59,6 +72,8 @@ class KinematicConstrainedFit{
 		RefCountedKinematicTree myTree_Bs;
 		RefCountedKinematicTree myTree_BsMM;
 		RefCountedKinematicTree renewed_BsConstrainedTree;
+		
+		
 
 };
 #endif

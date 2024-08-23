@@ -375,7 +375,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 		PVerrz=BSdz;
 	}
 	bmmgRootTree_->getVtx(BSx,BSy,BSz,PVx,PVy,PVz,PVerrx,PVerry,PVerrz);
-	bmmgRootTree_->BSdx_       = BSdx;
+	    bmmgRootTree_->BSdx_       = BSdx;
         bmmgRootTree_->BSdy_       = BSdy;
         bmmgRootTree_->BSdz_       = BSdz;
         bmmgRootTree_->BSsigmaZ_   = BSsigmaZ;
@@ -523,15 +523,14 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					p4phigamma.set(phigammaCand);
 					if (phigammaCand.mass() < BsLowerMassCutBeforeFit_ || phigammaCand.mass() > BsUpperMassCutBeforeFit_) continue;
 
-
-					//if (abs(phigammaCand.mass() - BsPDGMass_) > 0.150) continue ; 
-					std::cout<< " could we take out the value of teh bs mass kind of phi gamma candidate : " << phigammaCand.mass()<< "\n";
+					std::cout<< " could we take out the value of the bs mass  : kind of phi gamma candidate : " << phigammaCand.mass()<< "\n";
 					vector<TransientTrack> phi_transienttrk;
 					phi_transienttrk.push_back(trackBuilder.build(&pseudotrkkp));//pseudotrkkm
 					phi_transienttrk.push_back(trackBuilder.build(&pseudotrkkm));
 					KalmanVertexFitter kvfphi;
 					TransientVertex tvphi = kvfphi.vertex(phi_transienttrk);
 					if (!tvphi.isValid()) continue;
+					GlobalError gigi=tvphi.positionError();
 					/* This would be the bs vertex since there will be no transient tracks for photons
 					But I am not sure if this is the correct way to do it */
 					Vertex kalmanvertex_phi = tvphi;
@@ -553,19 +552,47 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					bmmgRootTree_->PhiPt_beffit_  = phiCand.pt();
 
 					KinematicConstrainedFit Kfitter;
-					bool fitSuccess = Kfitter.dobsphikkgFit(phi_transienttrk, nominalKaonMass, nominalKaonMass, ipatPhoton);
+					bool fitSuccess = Kfitter.dobsphikkgFit(phi_transienttrk, nominalKaonMass, nominalKaonMass);
 					std::cout<< " the fit success : "<< fitSuccess << "\n";
 					if(fitSuccess != 1) continue;
 
 					math::XYZVector      pperp(track1.px() + track2.px(), track1.py() + track2.py(), 0.);
 					reco::Vertex::Point  vpoint = kalmanvertex_phi.position();
-					std::cout<< " the vertex point : "<< vpoint << "\n";
+					double chi2_pv_kalmanvtx = (PVx - vpoint.x()) * (PVx - vpoint.x()) / (PVx * PVx) +
+                        (PVy - vpoint.y()) * (PVy - vpoint.y()) / (PVy * PVy) +
+                        (PVz - vpoint.z()) * (PVz - vpoint.z()) / (PVz * PVz);
+                    AlgebraicVector3 predefinedPV(PVx, PVy, PVz);
+					AlgebraicVector3 recoVtx( vpoint.x(), vpoint.y(), vpoint.z());
+					AlgebraicVector3 diff = predefinedPV - recoVtx;
+					TVectorD diffVector(3);
+					diffVector[0] = diff[0];
+					diffVector[1] = diff[1];
+					diffVector[2] = diff[2];
+					TMatrixD covarianceMatrix(3, 3);
+   					covarianceMatrix(0,0) = gigi.cxx();
+                    covarianceMatrix(0,1) = 0.0;
+					covarianceMatrix(0,2) = 0.0;
+					covarianceMatrix(1,0) = gigi.cyx();
+					covarianceMatrix(1,1) = gigi.cyy();
+                    covarianceMatrix(1,2) = 0.0;
+   					covarianceMatrix(2,0) = gigi.czx();
+  					covarianceMatrix(2,1) = gigi.czy();
+  				    covarianceMatrix(2,2) = gigi.czz();
+					/*TMatrixD diffMatrix(3, 1);  // Column vector
+					diffMatrix(0, 0) = diff[0];
+					diffMatrix(1, 0) = diff[1];
+					diffMatrix(2, 0) = diff[2];*/
+					TMatrixD invCovarianceMatrix = covarianceMatrix.Invert();
+					//TMatrixD result = diffMatrix.T() * invCovarianceMatrix * diffMatrix;
+					double mahalanobisDistanceSquared = diffVector * (invCovarianceMatrix * diffVector);
+					double mahalanobisDistance = std::sqrt(mahalanobisDistanceSquared);
+					if (mahalanobisDistance > 5.0) continue;
 					GlobalPoint secondaryVertex (vpoint.x(), vpoint.y(), vpoint.z());
 					GlobalPoint displacementFromBeamspot( -1*((BSx -  secondaryVertex.x()) +
 					  (secondaryVertex.z() - BSz) * BSdxdz),-1*((BSy - secondaryVertex.y())+  (secondaryVertex.z() - BSz) * BSdydz), 0);
 					reco::Vertex::Point vperp(displacementFromBeamspot.x(),displacementFromBeamspot.y(),0.);
 					double cosAlpha = vperp.Dot(pperp)/(vperp.R()*pperp.R());
-					std::cout<< " the cosine alpha : "<< cosAlpha << "\n";
+					
 					
 					
 					//RefCountedKinematicParticle bs = Kfitter.getParticle();
@@ -579,8 +606,16 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					bmmgRootTree_->BsPhiGammaPhi_beffit_ = phigammaCand.phi();
 					bmmgRootTree_->BsPhiGammaPt_beffit_  = phigammaCand.pt();
 					bmmgRootTree_->BsPhiGamma_vtxProb_   = vtxProb_Phi;
-					bmmgRootTree_->BsPhiGamma_CosineAlpha_ = cosAlpha;
-					bmmgRootTree_->BsPhiGamma_KKDCA_       = KKDCA;
+					bmmgRootTree_->BsPhiGamma_CosineAlpha_          = cosAlpha;
+					bmmgRootTree_->BsPhiGamma_KKDCA_                = KKDCA;
+					bmmgRootTree_->BsPhiGamma_Mahalanobis_          = mahalanobisDistance;
+					bmmgRootTree_->BsPhiGamma_Chi2pv_KVFvtx_        = chi2_pv_kalmanvtx;
+					bmmgRootTree_->BsPhiGamma_Mahalanobis_          = mahalanobisDistance;
+			
+
+					
+					
+					
 					
 
 				}
