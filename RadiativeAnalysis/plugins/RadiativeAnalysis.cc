@@ -592,6 +592,9 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					  (secondaryVertex.z() - BSz) * BSdxdz),-1*((BSy - secondaryVertex.y())+  (secondaryVertex.z() - BSz) * BSdydz), 0);
 					reco::Vertex::Point vperp(displacementFromBeamspot.x(),displacementFromBeamspot.y(),0.);
 					double cosAlpha = vperp.Dot(pperp)/(vperp.R()*pperp.R());
+
+
+					
 					
 					
 					
@@ -611,6 +614,26 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					bmmgRootTree_->BsPhiGamma_Mahalanobis_          = mahalanobisDistance;
 					bmmgRootTree_->BsPhiGamma_Chi2pv_KVFvtx_        = chi2_pv_kalmanvtx;
 					bmmgRootTree_->BsPhiGamma_Mahalanobis_          = mahalanobisDistance;
+
+
+					RefCountedKinematicTree reftree = Kfitter.getTree();
+					vector< RefCountedKinematicParticle > bs_children = reftree->finalStateParticles();
+					AlgebraicVector7 bs_par1 = bs_children[0]->currentState().kinematicParameters().vector();
+					AlgebraicVector7 bs_par2 = bs_children[1]->currentState().kinematicParameters().vector();
+					double pt1 = sqrt(bs_par1[3]*bs_par1[3]+bs_par1[4]*bs_par1[4]);
+					double pt2 = sqrt(bs_par2[3]*bs_par2[3]+bs_par2[4]*bs_par2[4]);
+					std::cout<< " the pt1 and pt2 : "<< pt1 << "\t" << pt2 << "\n";
+					bmmgRootTree_->K1Pt_beffit_   = pt1;
+					bmmgRootTree_->K2Pt_beffit_   = pt2;
+					TLorentzVector pK1;
+					double en1 = sqrt(bs_par1[3]*bs_par1[3]+bs_par1[4]*bs_par1[4]+bs_par1[5]*bs_par1[5]+bs_par1[6]*bs_par1[6]);
+					pK1.SetPxPyPzE(bs_par1[3],bs_par1[4],bs_par1[5],en1);
+					TLorentzVector pK2;
+					double en2 = sqrt(bs_par2[3]*bs_par2[3]+bs_par2[4]*bs_par2[4]+bs_par2[5]*bs_par2[5]+bs_par2[6]*bs_par2[6]);
+					pK2.SetPxPyPzE(bs_par2[3],bs_par2[4],bs_par2[5],en2);
+					TLorentzVector pPhi = pK1 + pK2;
+					bmmgRootTree_->BsPhiGamma_PhiM_fit_   = pPhi.M();
+					std::cout << " the phi mass : " << pPhi.M() << "\n";
 			
 
 					

@@ -87,14 +87,14 @@ bool KinematicConstrainedFit::dobsphikkgFit(std::vector<reco::TransientTrack> t_
 	float phiMsigma = 0.00002;
 	KinematicConstraint * phi_const = new MassKinematicConstraint( nominalPhiMass, phiMsigma);
 	PhiTree = constFitter.fit(phi_const,PhiTree);
-	renewed_BsConstrainedTree = PhiTree;
-	if(renewed_BsConstrainedTree->isEmpty()) {
+	myTree_Bs = PhiTree;
+	if(myTree_Bs->isEmpty()) {
 		delete phi_const;
 		return 0;
 	}
-	renewed_BsConstrainedTree->movePointerToTheTop();
-	bs = renewed_BsConstrainedTree->currentParticle();
-	bsVertex = renewed_BsConstrainedTree->currentDecayVertex();
+	myTree_Bs->movePointerToTheTop();
+	bs = myTree_Bs->currentParticle();
+	bsVertex = myTree_Bs->currentDecayVertex();
 	/*renewed_BsConstrainedTree->movePointerToTheTop();
 	RefCountedKinematicParticle phi = renewed_BsConstrainedTree->currentParticle();
 	float photon_mass = 0.0;

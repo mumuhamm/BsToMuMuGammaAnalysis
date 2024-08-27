@@ -135,6 +135,9 @@ class RadiativeRootTree {
 		 double BsPhiGamma_KKDCA_;
 		 double BsPhiGamma_Chi2pv_KVFvtx_;
 		 double BsPhiGamma_Mahalanobis_;
+		 double BsPhiGamma_K1Pt_fit_;
+		 double BsPhiGamma_K2Pt_fit_;
+		 double BsPhiGamma_PhiM_fit_;
 
 
 
