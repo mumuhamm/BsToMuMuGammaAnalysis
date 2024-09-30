@@ -154,68 +154,68 @@ RadiativeAnalysis::RadiativeAnalysis(const edm::ParameterSet& iConfig):
 {
 	isMCstudy_ = iConfig.getParameter<bool>("isMCstudy");
 	genParticlesLabel                 = iConfig.getParameter<InputTag>("genParticlesLabel");
-    genParticlesTok                   = consumes<edm::View<reco::GenParticle>>(genParticlesLabel);
-    MuonTag                           = iConfig.getParameter<edm::InputTag>("MuonTag");
-    MuonTagTok                        = consumes<edm::View<pat::Muon>>(MuonTag);
+        genParticlesTok                   = consumes<edm::View<reco::GenParticle>>(genParticlesLabel);
+        MuonTag                           = iConfig.getParameter<edm::InputTag>("MuonTag");
+        MuonTagTok                        = consumes<edm::View<pat::Muon>>(MuonTag);
 	JetTag                            = iConfig.getParameter<edm::InputTag>("JetTag");
-    JetTagTok                         = consumes<edm::View<pat::Jet>>(JetTag);
+        JetTagTok                         = consumes<edm::View<pat::Jet>>(JetTag);
 	PhotonTag                         = iConfig.getParameter<edm::InputTag>("PhotonTag");
-    PhotonTagTok                      = consumes<edm::View<pat::Photon>>(PhotonTag);
+        PhotonTagTok                      = consumes<edm::View<pat::Photon>>(PhotonTag);
 	OOTPhotonTag                      = iConfig.getParameter<edm::InputTag>("OOTPhotonTag");
-    OOTPhotonTagTok                   = consumes<edm::View<pat::Photon>>(OOTPhotonTag);
+        OOTPhotonTagTok                   = consumes<edm::View<pat::Photon>>(OOTPhotonTag);
 	ElectronTag                       = iConfig.getParameter<edm::InputTag>("ElectronTag");
-    ElectronTagTok                    = consumes<edm::View<pat::Electron>>(ElectronTag);
+        ElectronTagTok                    = consumes<edm::View<pat::Electron>>(ElectronTag);
 	SuperClusterTag                   = iConfig.getParameter<edm::InputTag>("SuperClusterTag");
 	SuperClusterTagTok                = consumes<edm::View<reco::SuperCluster>>(SuperClusterTag);
 	OOTSuperClusterTag                = iConfig.getParameter<edm::InputTag>("OOTSuperClusterTag");
-    OOTSuperClusterTagTok             = consumes<edm::View<reco::SuperCluster>>(OOTSuperClusterTag);
+        OOTSuperClusterTagTok             = consumes<edm::View<reco::SuperCluster>>(OOTSuperClusterTag);
 	PUInfo                            = iConfig.getParameter<InputTag>("PUInfo");
-    PUInfoTok                         = consumes<edm::View<PileupSummaryInfo>>(PUInfo);
-    vertexBeamSpot                    = iConfig.getParameter<edm::InputTag>("vertexBeamSpot");
-    vertexBeamSpotTok                 = consumes<reco::BeamSpot>(vertexBeamSpot);
+        PUInfoTok                         = consumes<edm::View<PileupSummaryInfo>>(PUInfo);
+        vertexBeamSpot                    = iConfig.getParameter<edm::InputTag>("vertexBeamSpot");
+        vertexBeamSpotTok                 = consumes<reco::BeamSpot>(vertexBeamSpot);
 	primaryvertex                     = iConfig.getParameter<edm::InputTag>("primaryvertex");
-    primaryvertexTok                  = consumes<edm::View<reco::Vertex>>(primaryvertex);
+        primaryvertexTok                  = consumes<edm::View<reco::Vertex>>(primaryvertex);
 	triggerresults                    = iConfig.getParameter<edm::InputTag>("triggerresults");
-    triggerresultsTok                 = consumes<edm::TriggerResults>(triggerresults);
+        triggerresultsTok                 = consumes<edm::TriggerResults>(triggerresults);
 	pfCandTag                         = iConfig.getParameter<edm::InputTag>("pfCandTag");
-    pfCandTagTok                      = consumes<edm::View<pat::PackedCandidate>>(pfCandTag);
+        pfCandTagTok                      = consumes<edm::View<pat::PackedCandidate>>(pfCandTag);
 	IsoTrackTag                       = iConfig.getParameter<edm::InputTag>("IsoTrackTag");
-    IsoTrackTagTok                    = consumes<edm::View<pat::IsolatedTrack>>(IsoTrackTag);
-    trackBuilderTok                   = esConsumes(edm::ESInputTag("", "TransientTrackBuilder"));
+        IsoTrackTagTok                    = consumes<edm::View<pat::IsolatedTrack>>(IsoTrackTag);
+        trackBuilderTok                   = esConsumes(edm::ESInputTag("", "TransientTrackBuilder"));
 
 
 	StoreDeDxInfo_                    = iConfig.getParameter<bool>("StoreDeDxInfo");
 	PionZeroMassWindowNoFit_          = iConfig.getParameter<double>("PionZeroMassWindowNoFit");
-    JpsiMassWindowBeforeFit_          = iConfig.getParameter<double>("JpsiMassWindowBeforeFit");
-    JpsiMassWindowAfterFit_           = iConfig.getParameter<double>("JpsiMassWindowAfterFit");
-    JpsiPtCut_                        = iConfig.getParameter<double>("JpsiPtCut");
+        JpsiMassWindowBeforeFit_          = iConfig.getParameter<double>("JpsiMassWindowBeforeFit");
+        JpsiMassWindowAfterFit_           = iConfig.getParameter<double>("JpsiMassWindowAfterFit");
+        JpsiPtCut_                        = iConfig.getParameter<double>("JpsiPtCut");
 	KaonTrackPtCut_                   = iConfig.getParameter<double>("KaonTrackPtCut");//https://arxiv.org/pdf/1307.2782.pdf
 	PsiMassWindowBeforeFit_           = iConfig.getParameter<double>("PsiMassWindowBeforeFit");
-    PsiMassWindowAfterFit_            = iConfig.getParameter<double>("PsiMassWindowAfterFit");
+        PsiMassWindowAfterFit_            = iConfig.getParameter<double>("PsiMassWindowAfterFit");
 	PhiMassWindowBeforeFit_           = iConfig.getParameter<double>("PhiMassWindowBeforeFit");
-    PhiMassWindowAfterFit_            = iConfig.getParameter<double>("PhiMassWindowAfterFit");
+        PhiMassWindowAfterFit_            = iConfig.getParameter<double>("PhiMassWindowAfterFit");
 	EtaMesonMassWindowNoFit_          = iConfig.getParameter<double>("EtaMesonMassWindowNoFit");
 	EtaPrimeMassWindowNoFit_          = iConfig.getParameter<double>("EtaPrimeMassWindowNoFit");
 	BsLowerMassCutBeforeFit_          = iConfig.getParameter<double>("BsLowerMassCutBeforeFit");
-    BsUpperMassCutBeforeFit_          = iConfig.getParameter<double>("BsUpperMassCutBeforeFit");
-    BsLowerMassCutAfterFit_           = iConfig.getParameter<double>("BsLowerMassCutAfterFit");
-    BsUpperMassCutAfterFit_           = iConfig.getParameter<double>("BsUpperMassCutAfterFit");
+        BsUpperMassCutBeforeFit_          = iConfig.getParameter<double>("BsUpperMassCutBeforeFit");
+        BsLowerMassCutAfterFit_           = iConfig.getParameter<double>("BsLowerMassCutAfterFit");
+        BsUpperMassCutAfterFit_           = iConfig.getParameter<double>("BsUpperMassCutAfterFit");
 	PionZeroPDGMass_                  = iConfig.getParameter<double>("PionZeroPDGMass");
 	BdPDGMass_                        = iConfig.getParameter<double>("BdPDGMass");
-    BpPDGMass_                        = iConfig.getParameter<double>("BpPDGMass");
-    BsPDGMass_                        = iConfig.getParameter<double>("BsPDGMass");
+        BpPDGMass_                        = iConfig.getParameter<double>("BpPDGMass");
+        BsPDGMass_                        = iConfig.getParameter<double>("BsPDGMass");
 	PionZeroPDGMass_                  = iConfig.getParameter<double>("PionZeroPDGMass");
 	EtaMesonPDGMass_                  = iConfig.getParameter<double>("EtaMesonPDGMass");
 	EtaPrimePDGMass_                  = iConfig.getParameter<double>("EtaPrimePDGMass");
 	outputFile_                       = iConfig.getUntrackedParameter<std::string>("outputFile");
 	verbose_                          = iConfig.getParameter<bool>("verbose");
-    TestVerbose_                      = iConfig.getParameter<bool>("TestVerbose");
+        TestVerbose_                      = iConfig.getParameter<bool>("TestVerbose");
 	
 	event_counter_ = 0;
-    elecounter_    = 0;
-    muoncounter_   = 0;
+        elecounter_    = 0;
+        muoncounter_   = 0;
 	jetcounter_    = 0;
-    tagmucounter_  = 0;
+        tagmucounter_  = 0;
 	photoncounter_ = 0;
 
 edm::LogInfo("BsToMuMuGammaAnalysis/RadiativeAnalysis")<< "Initializing Bs to MuMu Gamma  analyser  - Output file: " << outputFile_ <<"\n";
@@ -375,14 +375,23 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 		PVerrz=BSdz;
 	}
 	bmmgRootTree_->getVtx(BSx,BSy,BSz,PVx,PVy,PVz,PVerrx,PVerry,PVerrz);
-	    bmmgRootTree_->BSdx_       = BSdx;
+	bmmgRootTree_->BSdx_       = BSdx;
         bmmgRootTree_->BSdy_       = BSdy;
         bmmgRootTree_->BSdz_       = BSdz;
         bmmgRootTree_->BSsigmaZ_   = BSsigmaZ;
         bmmgRootTree_->BSdsigmaZ_  = BSdsigmaZ;
         bmmgRootTree_->BSdxdz_     = BSdxdz;
         bmmgRootTree_->BSdydz_     = BSdydz;
-
+	
+	
+	
+	edm::Handle<edm::View<reco::GenParticle> > genParticles;
+	if(isMCstudy_)
+              {
+                     iEvent.getByToken(genParticlesTok, genParticles);
+                     std::cout<<"genparticles:   "<<genParticles->size()<<"\n";
+                     fillMCInfo(genParticles);
+               }
 	edm::Handle<edm::TriggerResults> hltresults;
 	iEvent.getByToken(triggerresultsTok, hltresults);
 	//std::cout<<"hlt size:  "<<hltresults->size()<<"\n";
@@ -393,8 +402,8 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 		TString trigName = triggerNames_.triggerName(itrig);
 		//std::cout<<"triggernames:"<<itrig<<"::"<<trigName<<"\n";
 		if (trigName=="triggerbit_HLTDimuon4JpsiDisplaced_")      bmmgRootTree_->triggerbit_HLTDimuon4JpsiDisplaced_             = hltresults->accept(itrig);
-        if (trigName=="triggerbit_HLTDimuon4JpsiNoVertexing_")    bmmgRootTree_->triggerbit_HLTDimuon4JpsiNoVertexing_           = hltresults->accept(itrig);
-        if (trigName=="triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_")bmmgRootTree_->triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_       = hltresults->accept(itrig);
+		if (trigName=="triggerbit_HLTDimuon4JpsiNoVertexing_")    bmmgRootTree_->triggerbit_HLTDimuon4JpsiNoVertexing_           = hltresults->accept(itrig);
+		if (trigName=="triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_")bmmgRootTree_->triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_       = hltresults->accept(itrig);
 		if (trigName=="triggerbit_HLT_DoubleMu4_LowMass_Displaced_") bmmgRootTree_->triggerbit_HLT_DoubleMu4_LowMass_Displaced_  = hltresults->accept(itrig);
 		if (trigName=="triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_") bmmgRootTree_->triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_  = hltresults->accept(itrig);
 		if (trigName=="triggerbit_HLT_DoubleMu4_3_Photon4_BsToMMG_") bmmgRootTree_->triggerbit_HLT_DoubleMu4_3_Photon4_BsToMMG_  = hltresults->accept(itrig);
@@ -422,7 +431,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 		bool photonExcluded = false;
 
 		for(size_t jPhoton = iPhoton+1; jPhoton < photon->size() ; ++jPhoton){
-
+      
 			const pat::Photon& jpatPhoton = (*photon)[jPhoton];
 			const reco::Photon::ShowerShape& jShowerShape = jpatPhoton.full5x5_showerShapeVariables();
 
@@ -465,11 +474,11 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
                                 bmmgRootTree_->EtaPrimePt_alone_  = DiGammaCandidate.pt();
 			}
 			if (photonExcluded) break; // Exit inner loop if current photon is excluded
-		}
+ 		}
 		        if (photonExcluded) continue;
 
 
-			//BsToPhi(KK)Gamma 
+			//BsToPhi(KK)Gamma - need corresponding MC sample,run on data if the MC is not available
 		        for (size_t k=0; k< pfCands->size(); ++k){
 				const pat::PackedCandidate & track1 = (*pfCands)[k];
 				if (track1.charge()<0)continue;
@@ -561,7 +570,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					double chi2_pv_kalmanvtx = (PVx - vpoint.x()) * (PVx - vpoint.x()) / (PVx * PVx) +
 					(PVy - vpoint.y()) * (PVy - vpoint.y()) / (PVy * PVy) +
 					(PVz - vpoint.z()) * (PVz - vpoint.z()) / (PVz * PVz);
-                    AlgebraicVector3 predefinedPV(PVx, PVy, PVz);
+					AlgebraicVector3 predefinedPV(PVx, PVy, PVz);
 					AlgebraicVector3 recoVtx( vpoint.x(), vpoint.y(), vpoint.z());
 					AlgebraicVector3 diff = predefinedPV - recoVtx;
 					TVectorD diffVector(3);
@@ -642,7 +651,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					
 
 				}
-			}
+			}//End of the BsToPhi(KK)Gamma loop 
 
 
 
@@ -650,7 +659,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 			//BsToJpsiEta
 
 	        const reco::Photon::ShowerShape& iShowerShape = ipatPhoton.full5x5_showerShapeVariables();
-            bmmgRootTree_->photonSSSigmaiEtaiEta_ = iShowerShape.sigmaIetaIeta;
+		        bmmgRootTree_->photonSSSigmaiEtaiEta_ = iShowerShape.sigmaIetaIeta;
 			bmmgRootTree_->photonSSSigmaiEtaiPhi_ = iShowerShape.sigmaIetaIphi;
 			bmmgRootTree_->photonSSSigmaiPhiiPhi_ = iShowerShape.sigmaIphiIphi;
 			bmmgRootTree_->photonSSSigmaEtaEta_   = iShowerShape.sigmaEtaEta;
@@ -707,7 +716,164 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 bmmgRootTree_->fill();
 }
 
+GlobalVector RadiativeAnalysis::flightDirection(const reco::Vertex &pv, reco::Vertex &sv){
+  GlobalVector res(sv.position().X() - pv.position().X(),
+                    sv.position().Y() - pv.position().Y(),
+                    sv.position().Z() - pv.position().Z());
+  return res;
+}
+void RadiativeAnalysis::fillMCInfo(edm::Handle<edm::View<reco::GenParticle>>& genParticles){
+  int iNumberOfBdecays = 0;
+  Int_t SVindex =0;
+  std::set<int> listOfBmesonIds;
+  listOfBmesonIds.insert(511 );   // Bd
+  listOfBmesonIds.insert(521 );   // B+
+  listOfBmesonIds.insert(10511 );    // B_0*0
+  listOfBmesonIds.insert(10521 );    // B_0*+
+  listOfBmesonIds.insert(513 );   // B*d
+  listOfBmesonIds.insert(523 );   // B*d+
+  listOfBmesonIds.insert(10513 );   // B1(L)0
+  listOfBmesonIds.insert(10523 );   // B1(L)+
+  listOfBmesonIds.insert(20513 );   // B1(H)0
+  listOfBmesonIds.insert(20523 );   // B1(H)+
+  listOfBmesonIds.insert(515 );    // B2*_0
+  listOfBmesonIds.insert(525 );    // B2*_+
+  listOfBmesonIds.insert(531 );   // Bs
+  listOfBmesonIds.insert(10531 );    // B_s0*_0
+  listOfBmesonIds.insert(533 );   // B*s
+  listOfBmesonIds.insert(10533 );   // Bs1(L)0
+  listOfBmesonIds.insert(20533 );   // Bs1(H)0
+  listOfBmesonIds.insert(535 );    // Bs2*_0
+  listOfBmesonIds.insert(541 );   // Bc+
+  listOfBmesonIds.insert(10541 );   // B*c0+
+  listOfBmesonIds.insert(543 );   // B*c+
+  listOfBmesonIds.insert(10543 );   // Bc1(L)+
+  listOfBmesonIds.insert(20543 );   // Bc1(H)+
+  listOfBmesonIds.insert(545 );    // Bc2*_0
+  listOfBmesonIds.insert(551 );   // etab(1S)
+  listOfBmesonIds.insert(10551 );   // chib(1P)
+  listOfBmesonIds.insert(100551 );   // etab(2S)
+  listOfBmesonIds.insert(110551 );   // chib(2P)
+  listOfBmesonIds.insert(200551 );   // etab(3S)
+  listOfBmesonIds.insert(210551 );   // chib(3P)
+  listOfBmesonIds.insert(553 );   // upsilon(1S)
+  listOfBmesonIds.insert(10553 );   // hb(1P)
+  listOfBmesonIds.insert(20553 );   // chib1(1P)
+  listOfBmesonIds.insert(30553 );   // upsilon1(1D)
+  listOfBmesonIds.insert(100553 );   // upsilon(2S)
+  listOfBmesonIds.insert(110553 );   // hb(2P)
+  listOfBmesonIds.insert(120553 );   // chib1(2P)
+  listOfBmesonIds.insert(130553 );   // upsilon1(2D)
+  listOfBmesonIds.insert(200553 );   // upsilon(3S)
+  listOfBmesonIds.insert(210553 );   // hb(3P)
+  listOfBmesonIds.insert(220553 );   // chib1(3P)
+  listOfBmesonIds.insert(300553 );   // upsilon(4S)
+  listOfBmesonIds.insert(9000553 );   // upsilon(10860)
+  listOfBmesonIds.insert(9010553 );   // upsilon(11020)
+  listOfBmesonIds.insert(555 );   // chib2(1P)
+  listOfBmesonIds.insert(10555 );   // etab2(1D)
+  listOfBmesonIds.insert(20555 );   // upsilon2(1D)
+  listOfBmesonIds.insert(100555 );   // chib2(2P)
+  listOfBmesonIds.insert(110555 );   // etab2(2D)
+  listOfBmesonIds.insert(120555 );   // upsilon2(2D)
+  listOfBmesonIds.insert(200555 );   // chib2(3P)
+  listOfBmesonIds.insert(557 );   // upsilon3(1D)
+  listOfBmesonIds.insert(100557 );   // upsilon3(2D)
+  listOfBmesonIds.insert(5122 );   // lambda_b0
+  listOfBmesonIds.insert(5112 );   // sigma_b-
+  listOfBmesonIds.insert(5212 );   // sigma_b0
+  listOfBmesonIds.insert(5222 );   // sigma_b+
+  listOfBmesonIds.insert(5114 );   // sigma*_b-
+  listOfBmesonIds.insert(5214 );   // sigma*_b0
+  listOfBmesonIds.insert(5224 );   // sigma*_b+
+  listOfBmesonIds.insert(5132 );   // Xi_b-
+  listOfBmesonIds.insert(5232 );   // Xi_b0
+  listOfBmesonIds.insert(5312 );   // Xi'_b-
+  listOfBmesonIds.insert(5322 );   // Xi'_b0
+  listOfBmesonIds.insert(5314 );   // Xi*_b-
+  listOfBmesonIds.insert(5324 );   // Xi*_b0
+  listOfBmesonIds.insert(5332 );   // Omega_b-
+  listOfBmesonIds.insert(5334 );   // Omega*_b-
+  listOfBmesonIds.insert(5142 );   // Xi_bc0
+  listOfBmesonIds.insert(5242 );   // Xi_bc+
+  listOfBmesonIds.insert(5412 );   // Xi'_bc0
+  listOfBmesonIds.insert(5422 );   // Xi'_bc+
+  listOfBmesonIds.insert(5414 );   // Xi*_bc0
+  listOfBmesonIds.insert(5424 );   // Xi*_bc+
+  listOfBmesonIds.insert(5342 );   // Omega_bc0
+  listOfBmesonIds.insert(5432 );   // Omega'_bc0
+  listOfBmesonIds.insert(5434 );   // Omega*_bc0
+  listOfBmesonIds.insert(5442 );   // Omega_bcc+
+  listOfBmesonIds.insert(5444 );   // Omega*_bcc+
+  listOfBmesonIds.insert(5512 );   // Xi_bb-
+  listOfBmesonIds.insert(5522 );   // Xi_bb0
+  listOfBmesonIds.insert(5514 );   // Xi*_bb-
+  listOfBmesonIds.insert(5524 );   // Xi*_bb0
+  listOfBmesonIds.insert(5532 );   // Omega_bb-
+  listOfBmesonIds.insert(5524 );   // Omega*_bb-
+  listOfBmesonIds.insert(5542 );   // Omega_bbc0
+  listOfBmesonIds.insert(5544 );   // Omega*_bbc0
+  listOfBmesonIds.insert(554 );   // Omega_bbb-
+  /*
+  const Candidate * Jpsi = 0;
+  const Candidate * Phi = 0;
+  const Candidate * mup = 0;
+  const Candidate * mum = 0;
+  const Candidate * Kp = 0;
+  const Candidate * Km = 0;
+  const Candidate * Pi = 0;
+  const Candidate * Gamma = 0; 
+  const Candidate * Eta = 0; 
+  const Candidate * EtaPrime = 0; 
+*/
 
+
+  if(verbose_ == true){
+    cout<<"NewEvent-------"<<endl;
+  }
+  for( size_t i = 0; i < genParticles->size(); ++ i ) {
+    const GenParticle & genBsCand = (*genParticles)[ i ];
+    int MC_particleID=genBsCand.pdgId();
+    int absMC_particleID = abs(MC_particleID);
+	if(absMC_particleID ==443 ){
+		unsigned int numJpsiDaus = genBsCand.numberOfDaughters();
+		vector<unsigned int> JpsiMuIdx;
+		vector<unsigned int> JpsiPhotoIdx;
+
+		if (	numJpsiDaus > 1 && numJpsiDaus < 6){
+
+ 		 for(unsigned int a = 0; a < numJpsiDaus ; a++){
+			if(abs(genBsCand.daughter(a)->pdgId() ) == 13){
+
+				JpsiMuIdx.push_back(a);
+			}
+			if(abs(genBsCand.daughter(a)->pdgId()) == 22){
+				JpsiPhotoIdx.push_back(a);
+
+			}
+
+ 		 }	// ned of for loop
+		} // end of if numJpsiDaus
+	cout << "JpsiPhotoIdx.size() + JpsiMuIdx.size() = " <<  JpsiPhotoIdx.size() + JpsiMuIdx.size() << " = " << numJpsiDaus <<"\n";
+	if(JpsiMuIdx.size() == 2){
+		  if( JpsiPhotoIdx.size() + JpsiMuIdx.size() == numJpsiDaus &&  genBsCand.daughter(JpsiMuIdx[0])->pdgId() == -genBsCand.daughter(JpsiMuIdx[1])->pdgId()  ) {
+
+		   bmmgRootTree_->JpsiGenNumberOfCandidates_++;
+	 	   bmmgRootTree_->JpsiGenPVx_ = genBsCand.vx();
+	           bmmgRootTree_->JpsiGenPVy_ = genBsCand.vy();
+		   bmmgRootTree_->JpsiGenPVz_ = genBsCand.vz();
+		   bmmgRootTree_->JpsiGenLxyOld_= sqrt( pow( (bmmgRootTree_->BSx_ - genBsCand.vx()) , 2) + pow( (bmmgRootTree_->BSy_ - genBsCand.vy() ),2 )  );
+                   GlobalPoint GenDisplacementFromBeamspot( -1*( (bmmgRootTree_->BSx_ -  genBsCand.vx() ) + ( genBsCand.vz() - bmmgRootTree_->BSz_) * bmmgRootTree_->BSdxdz_ ), -1*( (bmmgRootTree_->BSy_ - genBsCand.vy() )+  (genBsCand.vz() - bmmgRootTree_->BSz_) * bmmgRootTree_->BSdydz_), 0 );
+                   bmmgRootTree_->JpsiGenLxy_ = GenDisplacementFromBeamspot.perp();
+                   bmmgRootTree_->JpsiGenLxyOverPt_ = ( GenDisplacementFromBeamspot.x()*genBsCand.px()  +  GenDisplacementFromBeamspot.y()*genBsCand.py()  ) /( genBsCand.px() * genBsCand.px() + genBsCand.py() * genBsCand.py() );
+	           bmmgRootTree_->JpsiGenPt_ = genBsCand.pt();
+		   cout << "JpsiGenLxy_ : "   << bmmgRootTree_->JpsiGenLxy_ << " = " << GenDisplacementFromBeamspot.perp() << endl;
+		   cout << "JpsiGenLxy/Pt:  " << bmmgRootTree_->JpsiGenLxyOverPt_ << endl;
+		  }
+	}
+	}
+  }
+}
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void RadiativeAnalysis::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation

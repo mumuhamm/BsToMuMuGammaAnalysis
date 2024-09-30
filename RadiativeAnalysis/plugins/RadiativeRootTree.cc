@@ -136,6 +136,19 @@ void RadiativeRootTree::createTree(const std::string filename)
   bmmgTree_->Branch("cospsi",&cospsi_,"cospsi/D");
   bmmgTree_->Branch("AngleBsDecayLength",&AngleBsDecayLength_,"AngleBsDecayLength/D");
 
+
+
+
+
+  bmmgTree_->Branch("JpsiGenPVz_",&JpsiGenPVz_,"JpsiGenPVz/D");
+  bmmgTree_->Branch("JpsiGenPVy_",&JpsiGenPVy_,"JpsiGenPVy/D");
+  bmmgTree_->Branch("JpsiGenPVx_",&JpsiGenPVx_,"JpsiGenPVx/D");
+  bmmgTree_->Branch("JpsiGenPt_",&JpsiGenPt_,"JpsiGenPt/D");
+  bmmgTree_->Branch("JpsiGenLxy_",&JpsiGenLxy_,"JpsiGenLxy/D");
+  bmmgTree_->Branch("JpsiGenLxyOld_",&JpsiGenLxyOld_,"JpsiGenLxyOld/D");
+  bmmgTree_->Branch("JpsiGenLxyOverPt_",&JpsiGenLxyOverPt_,"JpsiGenLxyOverPt/D");
+  bmmgTree_->Branch("JpsiGenNumberOfCandidates_",&JpsiGenNumberOfCandidates_,"JpsiGenNumberOfCandidates/D");
+
 }
 
 RadiativeRootTree::~RadiativeRootTree()
@@ -150,9 +163,9 @@ void RadiativeRootTree::writeFile()
 void RadiativeRootTree::resetEntries()
 {
 	runNumber_          = -9999999;
-  eventNumber_        = -9999999;
-  lumiSection_        = -9999999;
-  PUinteraction_      = -9999999;
+	eventNumber_        = -9999999;
+	lumiSection_        = -9999999;
+	PUinteraction_      = -9999999;
 	PUTrueinteraction_  = -9999999;
 	NVerticesbeforecut_ = -9999999;
 	NVerticesaftercut_  = -9999999;
@@ -160,7 +173,7 @@ void RadiativeRootTree::resetEntries()
 	BSy_                = -9999999;
 	BSz_                = -9999999;
 	BSdx_               = -9999999;
-  BSdy_               = -9999999;
+        BSdy_               = -9999999;
 	BSdz_               = -9999999;
 	BSdxdz_             = -9999999;
 	BSdydz_             = -9999999;
@@ -184,16 +197,16 @@ void RadiativeRootTree::resetEntries()
 	errdedxTrk_         = -9999999;
 	numdedxTrk_         = -9999999;
 	triggerbit_HLT_DoubleMu4_LowMass_Displaced_            = -9999999;
-  triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_            = -9999999;
+	triggerbit_HLT_DoubleMu4_4_Photon4_BsToMMG_            = -9999999;
 	triggerbit_HLT_DoubleMu4_3_Photon4_BsToMMG_            = -9999999;
-  triggerbit_HLT_DoubleMu4_3_Displaced_Photon4_BsToMMG_  = -9999999;
+	triggerbit_HLT_DoubleMu4_3_Displaced_Photon4_BsToMMG_  = -9999999;
 	triggerbit_HLTDimuon4JpsiDisplaced_                    = -9999999;
 	triggerbit_HLTDimuon4JpsiNoVertexing_                  = -9999999;
 	triggerbit_HLTDimuon4JpsiTrkTrkDisplaced_              = -9999999;
 	photonMultiplicity_ = -9999999;
 	photonPt_           = -9999999;
-  photonEta_          = -9999999;
-  photonPhi_          = -9999999;
+	photonEta_          = -9999999;
+	photonPhi_          = -9999999;
 	photonEnergy_       = -9999999;
 	photonET_           = -9999999;
 	photonTrkIso_       = -9999999;
@@ -235,40 +248,50 @@ void RadiativeRootTree::resetEntries()
 	EtaMesonEta_alone_      = -9999999;
 	EtaMesonPhi_alone_      = -9999999;
 	EtaMesonPt_alone_       = -9999999;
-  EtaPrimeM_alone_        = -9999999;
+        EtaPrimeM_alone_        = -9999999;
 	EtaPrimeEta_alone_      = -9999999;
 	EtaPrimePhi_alone_      = -9999999;
 	EtaPrimePt_alone_       = -9999999;
 
 
-  K1Pt_beffit_ = -9999999;
-  K1Pz_beffit_ = -9999999;
-  K1Eta_beffit_ = -9999999;
-  K1Phi_beffit_ = -9999999;
-  K2Pt_beffit_ = -9999999;
-  K2Pz_beffit_ = -9999999;
-  K2Eta_beffit_ = -9999999;
-  K2Phi_beffit_ = -9999999;
+        K1Pt_beffit_ = -9999999;
+        K1Pz_beffit_ = -9999999;
+        K1Eta_beffit_ = -9999999;
+        K1Phi_beffit_ = -9999999;
+        K2Pt_beffit_ = -9999999;
+        K2Pz_beffit_ = -9999999;
+        K2Eta_beffit_ = -9999999;
+        K2Phi_beffit_ = -9999999;
 
 
 	PhiM_beffit_            = -9999999;
-  PhiEta_beffit_          = -9999999;
-  PhiPhi_beffit_          = -9999999;
-  PhiPt_beffit_           = -9999999;
+        PhiEta_beffit_          = -9999999;
+        PhiPhi_beffit_          = -9999999;
+        PhiPt_beffit_           = -9999999;
 	BsPhiGammaM_beffit_     = -9999999;
-  BsPhiGammaEta_beffit_   = -9999999;
-  BsPhiGammaPhi_beffit_   = -9999999;
-  BsPhiGammaPt_beffit_    = -9999999;
-  BsPhiGamma_vtxProb_     = -9999999;
-  BsPhiGamma_CosineAlpha_ = -9999999;
-  BsPhiGamma_KKDCA_       = -9999999;
-  BsPhiGamma_Chi2pv_KVFvtx_ = -9999999;
-  BsPhiGamma_Mahalanobis_ = -9999999;
-  BsPhiGamma_K1Pt_fit_    = -9999999;
-  BsPhiGamma_K2Pt_fit_    = -9999999;
-  BsPhiGamma_PhiM_fit_    = -9999999; 
+        BsPhiGammaEta_beffit_   = -9999999;
+        BsPhiGammaPhi_beffit_   = -9999999;
+        BsPhiGammaPt_beffit_    = -9999999;
+        BsPhiGamma_vtxProb_     = -9999999;
+        BsPhiGamma_CosineAlpha_ = -9999999;
+        BsPhiGamma_KKDCA_       = -9999999;
+        BsPhiGamma_Chi2pv_KVFvtx_ = -9999999;
+        BsPhiGamma_Mahalanobis_ = -9999999;
+        BsPhiGamma_K1Pt_fit_    = -9999999;
+        BsPhiGamma_K2Pt_fit_    = -9999999;
+        BsPhiGamma_PhiM_fit_    = -9999999; 
 	electronMultiplicity_   = -9999999;
 	pfCandMultiplicity_     = -9999999;
+
+	JpsiGenLxy_             = -9999999;
+        JpsiGenPVz_             = -9999999;
+        JpsiGenPVy_             = -9999999;
+        JpsiGenPVx_             = -9999999;
+        JpsiGenPt_              = -9999999;
+        JpsiGenLxyOld_          = -9999999;
+        JpsiGenLxyOverPt_       = -9999999;
+        JpsiGenNumberOfCandidates_= -9999999;
+
 	for(size_t i=0; i<9;++i){PVcovariance_[i] = -9999999;}
 }
 
@@ -439,5 +462,24 @@ void RadiativeRootTree::setBranchAddresses(){
   
   bmmgTree_->SetBranchAddress("electronMultiplicity", &electronMultiplicity_);
   bmmgTree_->SetBranchAddress("pfCandMultiplicity", &pfCandMultiplicity_);
+
+  double JpsiGenLxy_;
+                 double JpsiGenPVz_;
+                 double JpsiGenPVy_;
+                 double JpsiGenPVx_;
+                 double JpsiGenPt_;
+                 double JpsiGenLxyOld_ ;
+                 double JpsiGenLxyOverPt_;
+                 int    JpsiGenNumberOfCandidates_;
+
+  bmmgTree_->SetBranchAddress("JpsiGenPVx", &JpsiGenPVx_);
+  bmmgTree_->SetBranchAddress("JpsiGenPVy", &JpsiGenPVy_);
+  bmmgTree_->SetBranchAddress("JpsiGenPVz", &JpsiGenPVz_);
+  bmmgTree_->SetBranchAddress("JpsiGenLxy", &JpsiGenLxy_);
+  bmmgTree_->SetBranchAddress("JpsiGenPt", &JpsiGenPt_);
+  bmmgTree_->SetBranchAddress("JpsiGenLxyOld", &JpsiGenLxyOld_);
+  bmmgTree_->SetBranchAddress("JpsiGenLxyOverPt", &JpsiGenLxyOverPt_);
+  bmmgTree_->SetBranchAddress("JpsiGenNumberOfCandidates", &JpsiGenNumberOfCandidates_);
+
 }
 

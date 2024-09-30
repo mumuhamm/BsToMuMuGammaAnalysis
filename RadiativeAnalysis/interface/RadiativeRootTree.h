@@ -113,13 +113,13 @@ class RadiativeRootTree {
 
 
 		 double K1Pt_beffit_;
-         double K1Pz_beffit_;
-         double K1Eta_beffit_;
-         double K1Phi_beffit_;
-         double K2Pt_beffit_;
-         double K2Pz_beffit_;
-         double K2Eta_beffit_;
-         double K2Phi_beffit_;
+                 double K1Pz_beffit_;
+                 double K1Eta_beffit_;
+                 double K1Phi_beffit_;
+                 double K2Pt_beffit_;
+                 double K2Pz_beffit_;
+                 double K2Eta_beffit_;
+                 double K2Phi_beffit_;
 
 		 double PhiM_beffit_;
 		 double PhiEta_beffit_;
@@ -151,7 +151,14 @@ class RadiativeRootTree {
 		 double AngleBsDecayLength_;
 
 
-
+                 double JpsiGenLxy_;
+                 double JpsiGenPVz_;
+                 double JpsiGenPVy_;
+                 double JpsiGenPVx_;
+		 double JpsiGenPt_;
+		 double JpsiGenLxyOld_ ;
+		 double JpsiGenLxyOverPt_;
+		 int    JpsiGenNumberOfCandidates_;
 		 //arrays 
 		 double PVcovariance_[9];
 		 TFile* bmmgFile_;

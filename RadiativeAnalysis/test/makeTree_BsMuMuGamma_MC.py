@@ -15,7 +15,7 @@ from PhysicsTools.PatAlgos.tools.coreTools import *
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 from PhysicsTools.PatAlgos.tools.pfTools import *
 
-process.maxEvents = cms.untracked.PSet(  input = cms.untracked.int32(30000) )
+process.maxEvents = cms.untracked.PSet(  input = cms.untracked.int32(20000) )
 process.source = cms.Source("PoolSource",
                             duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
                             skipEvents = cms.untracked.uint32(0),
@@ -85,7 +85,7 @@ process.bmmgVertexAnalysis = cms.EDAnalyzer("RadiativeAnalysis",
                                           triggerresults                = cms.InputTag("TriggerResults",'',"HLT"),
                                           pfCandTag                     = cms.InputTag("packedPFCandidates"),
                                           IsoTrackTag                   = cms.InputTag("isolatedTracks"),
-                                          StoreDeDxInfo                 = cms.bool(False),
+                                          StoreDeDxInfo                 = cms.bool(True),
                                           PionZeroMassWindowNoFit       = cms.double(0.0005),
                                           EtaMesonMassWindowNoFit       = cms.double(0.017),
                                           EtaPrimeMassWindowNoFit       = cms.double(0.230),
