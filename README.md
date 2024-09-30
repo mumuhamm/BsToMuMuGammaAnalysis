@@ -1,4 +1,4 @@
-# Ntuple Production for the  `B_s^0\to\mu^+\mu^-\gamma` analysis 
+## Ntuple Production for the  BsToMuMuGamma  analysis 
 ## Contributors
 - ```Alibordi,Marcin,Klara,Szymon ```
 (with update with full names soon)
