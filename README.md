@@ -1,6 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
-# Ntuple Production for the  `$B_s^0\to\mu^+\mu^-\gamma` analysis 
+# Ntuple Production for the  `B_s^0\to\mu^+\mu^-\gamma` analysis 
 ## Contributors
 - ```Alibordi,Marcin,Klara,Szymon ```
 (with update with full names soon)
