@@ -1,6 +1,6 @@
 ## Ntuple Production for the  BsToMuMuGamma  analysis 
 ## Contributors
-- ```Alibordi,Marcin,Klara,Szymon ```
+- ```Muhammad Alibordi```
 (with update with full names soon)
 ### Generic steps : Clone & Run : 
 ```bash
