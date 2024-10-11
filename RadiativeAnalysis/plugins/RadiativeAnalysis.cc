@@ -384,12 +384,21 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         bmmgRootTree_->BSdydz_     = BSdydz;
 	
 	
-	
+	int nBs=0;
 	edm::Handle<edm::View<reco::GenParticle> > genParticles;
 	if(isMCstudy_)
               {
                      iEvent.getByToken(genParticlesTok, genParticles);
-                     std::cout<<"genparticles:   "<<genParticles->size()<<"\n";
+                     //std::cout<<"genparticles:   "<<genParticles->size()<<"\n";
+		     for( size_t i = 0; i < genParticles->size(); ++ i ) {
+		     const GenParticle & genBsCand = (*genParticles)[ i ];
+		     if(abs(genBsCand.pdgId())/100==5){
+			     std::cout<< " B Cand PDGID : "<< genBsCand.pdgId()<< "\n";
+			     if(abs(genBsCand.pdgId()) == 531)nBs++;			     
+		     }
+		     }
+		     
+		     std::cout<<" number of BsCandidates : "<<  nBs << "\n";
                      fillMCInfo(genParticles);
                }
 	edm::Handle<edm::TriggerResults> hltresults;
@@ -477,7 +486,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
  		}
 		        if (photonExcluded) continue;
 
-
+/*
 			//BsToPhi(KK)Gamma - need corresponding MC sample,run on data if the MC is not available
 		        for (size_t k=0; k< pfCands->size(); ++k){
 				const pat::PackedCandidate & track1 = (*pfCands)[k];
@@ -540,8 +549,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 					TransientVertex tvphi = kvfphi.vertex(phi_transienttrk);
 					if (!tvphi.isValid()) continue;
 					GlobalError gigi=tvphi.positionError();
-					/* This would be the bs vertex since there will be no transient tracks for photons
-					But I am not sure if this is the correct way to do it */
+					//This would be the bs vertex since there will be no transient tracks for photons But I am not sure if this is the correct way to do it 
 					Vertex kalmanvertex_phi = tvphi;
 					double vtxProb_Phi = TMath::Prob(kalmanvertex_phi.chi2(),(int)kalmanvertex_phi.ndof());
 					if (vtxProb_Phi < 1e-4) continue;
@@ -587,10 +595,10 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
    					covarianceMatrix(2,0) = gigi.czx();
   					covarianceMatrix(2,1) = gigi.czy();
 					covarianceMatrix(2,2) = gigi.czz();
-					/*TMatrixD diffMatrix(3, 1);  // Column vector
-					diffMatrix(0, 0) = diff[0];
-					diffMatrix(1, 0) = diff[1];
-					diffMatrix(2, 0) = diff[2];*/
+					//TMatrixD diffMatrix(3, 1);  // Column vector
+					//diffMatrix(0, 0) = diff[0];
+					//diffMatrix(1, 0) = diff[1];
+					//diffMatrix(2, 0) = diff[2];
 					TMatrixD invCovarianceMatrix = covarianceMatrix.Invert();
 					//TMatrixD result = diffMatrix.T() * invCovarianceMatrix * diffMatrix;
 					double mahalanobisDistanceSquared = diffVector * (invCovarianceMatrix * diffVector);
@@ -653,7 +661,7 @@ void RadiativeAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 				}
 			}//End of the BsToPhi(KK)Gamma loop 
 
-
+*/
 
 			//BsToPhi(mumu)Gamma 
 			//BsToJpsiEta
