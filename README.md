@@ -25,8 +25,9 @@ cmsRun makeTree_BsMuMuGamma_MC.py
 -Work in Progress, please have a look in another repository : in a branch devel_GPExtrapolationPhaseI
 ```bash
 for now : 
-cmsrel CMSSW_14_0_15_patch1
-cd CMSSW_14_0_15_patch1/src
+cmsrel CMSSW_14_0_14
+cd CMSSW_14_0_14/src    
+#as Meng Lu suggested for 140X campaign https://cms-pdmv-prod.web.cern.ch/mcm/campaigns?prepid=RunIII2022Summer24GS&page=0&shown=63
 git cms-init 
 mkdir -p Configuration/GenProduction/
 git clone git@github.com:cms-sw/genproductions.git Configuration/GenProduction
@@ -38,7 +39,7 @@ rm -f   Configuration/GenProduction/python/EightTeV/Exotica_HSCP_SIM_cfi.py
 scram b -j 4
 
 git clone -b devel_GPExtrapolationPhaseI https://github.com/mumuhamm/PrivateMCProduction.git
-git clone https://github.com/mumuhamm/GeneratorInterface-EvtGenInterface.git  : for DEC,dec,pdl 
+git clone https://github.com/mumuhamm/GeneratorInterface-EvtGenInterface.git GeneratorInterface/EvtGenInterface/data  : for DEC,dec,pdl 
 ```
 
 -```GenFragments/privateCustomizations.py``` : Private customization in order to keep the sample size resonable
